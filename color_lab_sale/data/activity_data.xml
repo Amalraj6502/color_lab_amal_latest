@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <record id="work_order_issued_activity_type" model="mail.activity.type">
+            <field name="name">Work Order Issued</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">operation.work.orders</field>
+        </record>
+
+        <template id="sale_work_order_change_comment_summary" name="sale_work_order_change_comment_summary">
+            <div class="work_order_merge_summary">
+                <div class="text-danger m-2">
+                    <strong t-esc="title"/>
+                    <br/>
+                    <br/>
+                    <span class="fst-italic" t-esc="comment"/>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

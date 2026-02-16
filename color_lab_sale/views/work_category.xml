@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="work_category_tree">
+            <field name="name">Work Category List</field>
+            <field name="model">work.category</field>
+            <field name="arch" type="xml">
+                <list string="Work Category List" editable="bottom">
+                    <field name="step_count"/>
+                    <field name="previous_step"/>
+                    <field name="is_common_step" invisible="previous_step" optional="show"/>
+                    <field name="common_step_ids" widget="many2many_tags" invisible="not is_common_step"
+                           optional="show"/>
+                    <field name="section" optional="hide"/>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="is_work_print"/>
+                    <field name="is_step_bypass"/>
+                    <field name="group_ids" widget="many2many_tags"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="work_category_menu_action" model="ir.actions.act_window">
+            <field name="name">Work Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.category</field>
+            <field name="view_mode">list</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Work Category</p>
+            </field>
+        </record>
+
+        <menuitem id="work_categories_menu" parent="color_lab_sale.configuration_main_custom_menu" name="Work Categories"
+                  groups="color_lab_sale.group_work_order_manager"
+                  action="work_category_menu_action"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<!--    sample code -->
+    <template id="report_saleorder_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+
+                <div class="header">
+
+                </div>
+
+                <div class="page">
+                    <div>
+                        <img t-att-src="'data:image/png;base64,' + (doc.company_id.logo and doc.company_id.logo.decode('utf-8') or '')"
+                             alt="Company Logo"
+                             style="max-height: 60px;"/>
+                        <br/>
+                        <span t-esc="doc.company_id.name"/>
+                        <br/>
+                        <span t-esc="doc.company_id.street"/>
+                        <br/>
+                        <span t-esc="doc.company_id.state_id.name"/>
+                        <br/>
+                        <span t-esc="doc.company_id.country_id.name"/>
+
+                    </div>
+
+                    <div style="margin-top: 20px; margin-left: 560px;">
+                        <table style="border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 4px 10px;">
+                                    <strong>Customer:</strong>
+                                </td>
+                                <td t-esc="doc.partner_id.name"/>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 10px;">
+                                    <strong>Work Type:</strong>
+                                </td>
+                                <td t-esc="doc.work_type"/>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 10px;">
+                                    <strong>Work Title:</strong>
+                                </td>
+                                <td t-esc="doc.work_title.name"/>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 10px;">
+                                    <strong>Work Description:</strong>
+                                </td>
+                                <td t-esc="doc.work_description"/>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+
+
+                    <!-- Left and Right Divs -->
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 35%; text-align: left;">
+                                <span>Quotation No:</span>
+                                <br/>
+                                <span t-esc="doc.name"/>
+                            </td>
+                            <td style="width: 35%; text-align: left;">
+                                <span>Quotation Date:</span>
+                                <br/>
+                                <span t-esc="doc.date_order"/>
+                            </td>
+                            <td style="width: 30%; text-align: left;">
+                                <span>Expiration:</span>
+                                <br/>
+                                <span t-esc="doc.validity_date"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top: 40px;">
+                        <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                            Printer Configuration
+                        </h3>
+
+                        <table border="1" style="width: 100%; border-collapse: collapse;">
+                            <thead style="background-color: #4CAF50; color: white;">
+                                <tr>
+                                    <th style="padding: 8px; text-align: center;">Printer</th>
+                                    <th style="padding: 8px; text-align: center;">Service</th>
+                                    <th style="padding: 8px; text-align: center;">Print</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Example Row 1 -->
+                                <tr>
+                                    <td style="padding: 8px; text-align: center;" t-esc="doc.printer_id.name"/>
+                                    <td style="padding: 8px; text-align: center;" t-esc="doc.service_id.name"/>
+                                    <td style="padding: 8px; text-align: center;" t-esc="doc.package_id.name"/>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+
+
+                    <t t-if="doc.is_mini_book_required">
+                        <div style="margin-top: 40px;">
+                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                                Mini Book
+                            </h3>
+
+                            <table border="1" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background-color: #4CAF50; color: white;">
+                                    <tr>
+                                        <th style="padding: 8px; text-align: center;">Mini Book Configuration</th>
+                                        <th style="padding: 8px; text-align: center;">Height</th>
+                                        <th style="padding: 8px; text-align: center;">Length</th>
+                                        <th style="padding: 8px; text-align: center;">Width</th>
+                                        <th style="padding: 8px; text-align: center;">Quantity</th>
+                                        <th style="padding: 8px; text-align: center;">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.mini_book_conf.name"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.mini_book_height"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.mini_book_length"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.mini_book_width"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.mini_book_qty"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.mini_book_amount"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+
+                    <t t-if="doc.is_addons">
+                        <div style="margin-top: 40px;">
+                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                                Addons Lines
+                            </h3>
+
+                            <table border="1" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background-color: #4CAF50; color: white;">
+                                    <tr>
+                                        <th style="padding: 8px; text-align: center;">Product</th>
+                                        <th style="padding: 8px; text-align: center;">Description</th>
+                                        <th style="padding: 8px; text-align: center;">Quantity</th>
+                                        <th style="padding: 8px; text-align: center;">Unit of measure</th>
+                                        <th style="padding: 8px; text-align: center;">Unit price</th>
+                                        <th style="padding: 8px; text-align: center;">Sub Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <t t-foreach="doc.addons_line_ids" t-as="line">
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.product_id.name"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.name"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.product_uom_qty"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.product_uom.name"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.price_unit"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.price_subtotal"/>
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!--                            <t t-if="doc.is_emboss_cover or doc.is_emboss_box or doc.is_emboss_print">-->
+                        <!--                                                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">-->
+                        <!--                                Emboss Section-->
+                        <!--                            </h3>-->
+
+
+                        <t t-if="doc.is_emboss_cover">
+                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                                Emboss Section Cover Required
+                            </h3>
+
+
+                            <div style="margin-top: 40px;">
+                                <table border="1" style="width: 100%; border-collapse: collapse;">
+                                    <thead style="background-color: #4CAF50; color: white;">
+                                        <tr>
+                                            <th style="padding: 8px; text-align: center;">EMBOSS COVER</th>
+                                            <th style="padding: 8px; text-align: center;">Emboss Cover Description
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 8px; text-align: center;" t-esc="doc.emboss_cover"/>
+                                            <td style="padding: 8px; text-align: center;"
+                                                t-esc="doc.emboss_cover_description"/>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.is_emboss_box">
+                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                                Emboss Section Box Required
+                            </h3>
+
+
+                            <div style="margin-top: 40px;">
+                                <table border="1" style="width: 100%; border-collapse: collapse;">
+                                    <thead style="background-color: #4CAF50; color: white;">
+                                        <tr>
+                                            <th style="padding: 8px; text-align: center;">EMBOSS BOX</th>
+                                            <th style="padding: 8px; text-align: center;">Emboss Box Description
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 8px; text-align: center;" t-esc="doc.emboss_box"/>
+                                            <td style="padding: 8px; text-align: center;"
+                                                t-esc="doc.emboss_box_description"/>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.is_emboss_print">
+                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                                Emboss Section Print Required
+                            </h3>
+
+                            <div style="margin-top: 40px;">
+                                <table border="1" style="width: 100%; border-collapse: collapse;">
+                                    <thead style="background-color: #4CAF50; color: white;">
+                                        <tr>
+                                            <th style="padding: 8px; text-align: center;">EMBOSS PRINT</th>
+                                            <th style="padding: 8px; text-align: center;">Emboss Print Qty</th>
+                                            <th style="padding: 8px; text-align: center;">Emboss Print Rate</th>
+                                            <th style="padding: 8px; text-align: center;">Emboss Print Description
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 8px; text-align: center;" t-esc="doc.emboss_print"/>
+                                            <td style="padding: 8px; text-align: center;"
+                                                t-esc="doc.emboss_print_qty"/>
+                                            <td style="padding: 8px; text-align: center;"
+                                                t-esc="doc.emboss_print_rate"/>
+                                            <td style="padding: 8px; text-align: center;"
+                                                t-esc="doc.emboss_print_description"/>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+
+                        <div style="margin-top: 40px;">
+                            <h3 style="color: black; text-align: center; font-weight: bold;  padding-bottom: 6px; margin-bottom: 15px;">
+                                Order Lines
+                            </h3>
+
+                            <table border="1" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background-color: #4CAF50; color: white;">
+                                    <tr>
+                                        <th style="padding: 8px; text-align: center;">Main Product</th>
+                                        <th style="padding: 8px; text-align: center;">Page</th>
+                                        <th style="padding: 8px; text-align: center;">Rate</th>
+                                        <th style="padding: 8px; text-align: center;">Type</th>
+                                        <th style="padding: 8px; text-align: center;">Product T</th>
+                                        <th style="padding: 8px; text-align: center;">Varient</th>
+                                        <th style="padding: 8px; text-align: center;">Quantity</th>
+                                        <th style="padding: 8px; text-align: center;">Unit Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Example Row 1 -->
+                                    <tr>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.at_product.name"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.at_page"/>
+                                        <td style="padding: 8px; text-align: center;" t-esc="doc.at_rate"/>
+                                        <t t-foreach="doc.order_line" t-as="line">
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.at_type"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.product_template_id.name"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.product_id.name"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.product_uom_qty"/>
+                                            <td style="padding: 8px; text-align: center;" t-esc="line.price_unit"/>
+
+
+                                        </t>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 30px; text-align: right;">
+                                <strong>Product Rate:</strong>
+                                <span t-esc="doc.at_rate"/>
+                                <br/>
+
+                                <strong>MiniBook Total Rate:</strong>
+                                <span t-esc="doc.mini_total"/>
+                                <br/>
+
+                                <strong>Emboss Rate:</strong>
+                                <span t-esc="doc.emboss_print_rate"/>
+                                <br/>
+
+                                <strong>Grand Total:</strong>
+                                <span t-esc="doc.grand_total"/>
+                            </div>
+
+
+                        </div>
+
+                    </t>
+
+
+                </div>
+
+                <div class="footer"
+                     style="border-top: 1px solid #ccc; padding-top: 5px; font-size: 10px; color: #555; text-align: center;">
+                    <span>Email: info@alukkascolorlab.com | Website:
+                        <a href="http://www.alukkascolorlab.com">www.alukkascolorlab.com</a>
+                    </span>
+                    <br/>
+                    Page
+                    <span class="page"/>
+                    of
+                    <span class="topage"/>
+                </div>
+
+
+            </t>
+        </t>
+
+    </template>
+</odoo>

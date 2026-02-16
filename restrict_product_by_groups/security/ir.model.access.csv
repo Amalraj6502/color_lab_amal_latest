@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_template_readonly,access_product_template_readonly,product.model_product_template,group_product_read_only,1,0,0,0
+access_product_product_readonly,access_product_product_readonly,product.model_product_product,group_product_read_only,1,0,0,0
+access_sale_order_list_view_read,access_sale_order_list_view_read,sale.model_sale_order,group_sale_order_list_view,1,0,0,0

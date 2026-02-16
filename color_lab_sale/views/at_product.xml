@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="at_product_tree">
+            <field name="name">AT Product</field>
+            <field name="model">at.product</field>
+            <field name="arch" type="xml">
+                <list string="AT Product Tree" editable="bottom">
+                    <field name="name"/>
+                    <field name="size" required="1"/>
+                    <field name="printer_id"/>
+                    <field name="rate" required="1"/>
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="at_product_form">
+            <field name="name">at.product.form</field>
+            <field name="model">at.product</field>
+            <field name="arch" type="xml">
+                <form string="AT Product Form">
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field id="name" widget="text" class="text-break" name="name" default_focus="1"
+                                       placeholder="Product Name"/>
+                            </h1>
+                            <field name="parent_id"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="size"/>
+                                <field name="printer_id"/>
+                                <field name="rate"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        <record id="at_product_menu_action" model="ir.actions.act_window">
+            <field name="name">AT Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">at.product</field>
+            <field name="view_mode">list</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The Product</p>
+            </field>
+        </record>
+        <menuitem id="at_product_menu" parent="color_lab_sale.menu_alukkas_inventory_configuration" name="Main Product Master"
+                  action="at_product_menu_action"/>
+    </data>
+</odoo>

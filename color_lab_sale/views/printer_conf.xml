@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="printer_conf_list">
+            <field name="name">Printer Conf List</field>
+            <field name="model">printer.conf</field>
+            <field name="arch" type="xml">
+                <list string="Printer Machine Configuration">
+                    <field name="name"/>
+                    <field name="brand_id"/>
+                    <field name="model_no"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="printer_conf_kanban_view">
+            <field name="name">printer.conf.kanban</field>
+            <field name="model">printer.conf</field>
+            <field name="arch" type="xml">
+                <kanban sample="1" class="o_kanban_dashboard" color="color">
+                    <!-- Fields -->
+                    <field name="image_printer"/>
+                    <field name="active"/>
+                    <field name="brand_id"/>
+                    <field name="display_name"/>
+                    <field name="model_no"/>
+                    <field name="service_ids"/>
+                    <field name="color"/>
+
+                    <!-- Templates -->
+                    <templates>
+                        <t t-name="kanban-box" class="o_kanban_record o_kanban_custom">
+                            <!-- Archived Ribbon -->
+                            <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+
+                            <!-- Main Card -->
+                            <div class="o_kanban_card_content d-flex flex-row position-relative">
+                                <!-- Image Section -->
+                                <div class="o_kanban_image_fill_custom position-relative w-25 me-3 overflow-hidden">
+                                    <div t-if="record.brand_id.raw_value" class="mb-2">
+                                        <field name="brand_id" widget="image" class="h-100 w-100"
+                                               options="{'preview_image': 'image_1920', 'img_class': 'object-fit-contain'}"/>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow-1">
+                                    <div class="mb-2">
+                                        <field name="display_name" class="fw-bold fs-5"/>
+                                    </div>
+
+                                    <div class="o_kanban_image_fill position-relative w-25 me-3 overflow-hidden">
+                                        <div t-if="record.image_printer.raw_value" class="mb-2">
+
+                                            <field name="image_printer" alt="Printer Image"
+                                                   widget="image"
+                                                   options="{'img_class': 'object-fit-cover', 'zoom': true}"/>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Model Number and Services -->
+                                    <div t-if="record.model_no.raw_value" class="mb-2">
+                                        <field name="model_no" class="text-muted"/>
+                                        <span t-if="record.service_ids.raw_value">,</span>
+                                        <field name="service_ids" widget="many2many_tags" class="d-inline"/>
+                                    </div>
+
+                                    <!-- Footer Section -->
+                                    <footer class="d-flex justify-content-between align-items-center mt-2">
+                                        <div class="text-muted small">
+                                            <i class="fa fa-info-circle me-1"></i>
+                                            <span>Details</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-primary">View More</button>
+                                        </div>
+                                    </footer>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="printer_conf_form">
+            <field name="name">printer.conf.form</field>
+            <field name="model">printer.conf</field>
+            <field name="arch" type="xml">
+                <form string="Printer Conf Form">
+                    <sheet>
+                        <field name="image_printer" widget='image' class="oe_avatar"/>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field id="name" widget="text" class="text-break" name="name" default_focus="1"
+                                       placeholder="e.g. HP Indigo 7900 Ultra HD Album"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="brand_id"/>
+                                <field name="model_no"/>
+                                <field name="color" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="service_ids" widget="many2many_tags"/>
+                                <field name="user_ids" widget="many2many_tags"/>
+                                <field name="sequence_prefix" required="1"/>
+                            </group>
+                        </group>
+                        <label for="remarks"/>
+                        <field name="remarks"/>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        <record id="printer_configuration_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Machine Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.conf</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer Configuration</p>
+            </field>
+        </record>
+        <menuitem id="menu_operation_configuration" parent="menu_form_root" name="Configuration" sequence="90"/>
+         <menuitem id="configuration_main_custom_menu" name="Alukkas Configurations" web_icon="color_lab_sale,static/description/process.png"
+                  groups="color_lab_sale.group_work_order_manager"/>
+        <menuitem id="menu_printer_configuration" parent="color_lab_sale.configuration_main_custom_menu"
+                  name="Printer Configuration"
+                  action="printer_configuration_menu_action"/>
+    </data>
+</odoo>

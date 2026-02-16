@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_saleorder_new_list">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <div class="header">
+                            <table style=" border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 10px;">
+                                <tr>
+                                    <td style="width: 90%; vertical-align: middle; padding-left: 220px;">
+                                        <span style="font-weight: 800; font-size: 20px; letter-spacing: 1px;">
+                                            <t t-if="doc.sudo().state == 'sale'">
+                                                SALE ORDER
+                                            </t>
+                                            <t t-else="">
+                                                #QUOTATION
+                                            </t>
+                                        </span>
+
+                                    </td>
+                                    <td style="width: 10%; text-align: right;">
+                                        <img t-att-src="'data:image/png;base64,' + (doc.sudo().company_id.logo and doc.sudo().company_id.logo.decode('utf-8') or '')"
+                                             alt="Company Logo"
+                                             style="max-height: 80px;"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br/>
+
+
+                        <div>
+                            <div style=" text-align: center; margin-top: -30px;">
+                                <!--                                <span style=" font-weight: 800; font-size: 20px; letter-spacing: 1px;"># QUOTATION WITH TAX INCLUDED-->
+                                <!--                                </span>-->
+                                <div style="width: 100%; display: flex; justify-content: space-between; margin-top: 20px;">
+
+                                    <table style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 65%; text-align: left;">
+
+                                                <span>
+                                                    <strong>ORDER NO:</strong>
+                                                    <!--                                                    <span t-esc="doc.sudo().name"/>-->
+                                                    <t t-if="doc.sudo().state == 'sale'">
+                                                        <span t-esc="doc.sudo().name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-esc="doc.sudo().name"/>
+                                                    </t>
+                                                </span>
+
+                                                <br/>
+                                                <span>
+                                                    <strong>Agent :</strong>
+                                                    <span t-esc="doc.sudo().agent_id.name"/>
+                                                </span>
+                                                <br/>
+                                                <span>
+                                                    <strong>Customer :</strong>
+                                                    <span t-esc="doc.sudo().partner_id.name"/>
+                                                </span>
+                                                <br/>
+
+
+                                            </td>
+                                            <td style="width: 35%; text-align: left;">
+                                                <span>
+                                                    <strong>Date :</strong>
+                                                    <!--                                                    <span t-esc="doc.sudo().create_date"/>-->
+                                                    <span t-esc="env['ir.qweb.field.datetime'].value_to_html(doc.sudo().create_date, {})"/>
+
+                                                </span>
+
+                                                <br/>
+                                                <span>
+                                                    <strong>Title :</strong>
+                                                    <span t-esc="doc.sudo().work_title.name"/>
+                                                </span>
+                                                <br/>
+                                                <span>
+                                                    <strong>Description :</strong>
+                                                    <span t-esc="doc.sudo().work_description"/>
+                                                </span>
+                                                <br/>
+
+
+                                            </td>
+
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <!--                                <br/>-->
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 65%; text-align: left;">
+
+                                            <span>
+                                                <strong>Printer :</strong>
+                                                <span t-esc="doc.sudo().printer_id.name"/>
+                                            </span>
+                                            <br/>
+
+
+                                            <span>
+                                                <strong>Service :</strong>
+                                                <span t-esc="doc.sudo().service_id.name"/>
+                                            </span>
+
+                                            <br/>
+                                            <span>
+                                                <strong>Confirm Date:</strong>
+                                                <!--                                                <span t-esc="doc.sudo().sale_confirm_date"/>-->
+                                                <span t-esc="env['ir.qweb.field.datetime'].value_to_html(doc.sudo().sale_confirm_date, {})"/>
+                                            </span>
+
+
+                                        </td>
+                                        <td style="width: 35%; text-align: left;">
+                                            <span>
+                                                <strong><span t-esc="doc.sudo().service_id.name"/>:
+                                                </strong>
+                                                <span t-esc="doc.sudo().package_id.name"/>
+                                            </span>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                                <!--                                <br/>-->
+
+                                <!--                                <table style="width: 100%;">-->
+                                <!--                                    <tr>-->
+                                <!--                                        <td style="width: 40%; text-align: left;">-->
+                                <!--                                            <span>-->
+                                <!--                                                <strong>Main Product :</strong>-->
+                                <!--                                                <span t-esc="doc.sudo().at_product.name"/>/-->
+                                <!--                                                <span t-esc="doc.sudo().at_product.size"/>-->
+
+                                <!--                                            </span>-->
+                                <!--                                        </td>-->
+                                <!--                                        <td style="width: 30%; text-align: left;">-->
+                                <!--                                            <span>-->
+                                <!--                                                <strong>Page :</strong>-->
+                                <!--                                                <span t-esc="doc.sudo().at_page"/>-->
+                                <!--                                            </span>-->
+
+                                <!--                                        </td>-->
+
+                                <!--                                        <td style="width: 30%; text-align: left;">-->
+                                <!--                                            <span>-->
+                                <!--                                                <strong>Rate :</strong>-->
+                                <!--                                                <span t-esc="doc.sudo().at_rate_total_report"/>-->
+
+                                <!--                                            </span>-->
+
+                                <!--                                        </td>-->
+
+                                <!--                                    </tr>-->
+
+                                <!--                                </table>-->
+
+
+                            </div>
+                            <!--                            <br/>-->
+
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="width: 60%; border: 1px solid black; padding: 5px; text-align: left;">
+                                        <span>
+                                            <strong>Main Product :</strong>
+                                            <span t-esc="doc.sudo().at_product.name"/>/
+                                            <span t-esc="doc.sudo().at_product.size"/>
+
+                                        </span>
+                                    </td>
+                                    <td style="width: 20%; border: 1px solid black; padding: 5px; text-align: left;">
+                                        <span>
+                                            <strong>Page :</strong>
+                                            <span t-esc="doc.sudo().at_page"/>
+                                        </span>
+                                    </td>
+                                    <td style="width: 20%; border: 1px solid black; padding: 5px; text-align: left;">
+                                        <span>
+                                            <strong>Rate :</strong>
+                                            <span t-esc="doc.sudo().at_rate_total_report"/>
+
+                                        </span>
+                                    </td>
+
+                                </tr>
+                            </table>
+
+
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <!-- Emboss Cover -->
+                                <t t-if="doc.sudo().is_emboss_cover">
+                                    <tr>
+                                        <td colspan="1"
+                                            style="width: 50%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>Emboss Cover :</strong>
+                                            <span>Yes</span>
+                                            <!--                                            <span t-esc="doc.sudo().emboss_cover"/>-->
+                                        </td>
+                                        <td colspan="2"
+                                            style="width: 50%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>Description :</strong>
+                                            <span t-esc="doc.sudo().emboss_cover_description"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- Emboss Box -->
+                                <t t-if="doc.sudo().is_emboss_box">
+                                    <tr>
+                                        <td colspan="1"
+                                            style="width: 50%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>Emboss Box :</strong>
+                                            <span>Yes</span>
+                                            <!--                                            <span t-esc="doc.sudo().emboss_box"/>-->
+                                        </td>
+                                        <td colspan="2"
+                                            style="width: 50%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>Description :</strong>
+                                            <span t-esc="doc.sudo().emboss_box_description"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- Emboss Print (uses full 3 columns) -->
+                                <t t-if="doc.sudo().is_emboss_print">
+                                    <tr>
+                                        <td style="width: 40%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>Emboss Print :</strong>
+                                            <span>Yes</span>
+                                            <!--                                            <span t-esc="doc.sudo().emboss_print"/>-->
+                                        </td>
+                                        <td style="width: 20%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>QTY :</strong>
+                                            <span t-esc="doc.sudo().emboss_print_qty"/>
+                                        </td>
+                                        <td style="width: 40%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>Description :</strong>
+                                            <br/>
+                                            <span t-esc="doc.sudo().emboss_print_description"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                            <!--                            <br/>-->
+
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <t t-if="doc.sudo().is_mini_book_required">
+                                    <tr>
+                                        <td style="width: 75%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>MINIBOOK Configuration :</strong>
+                                            <span t-esc="doc.sudo().mini_book_conf.name"/>
+                                        </td>
+                                        <td style="width: 25%; border: 1px solid black; padding: 5px; text-align: left;">
+                                            <strong>QTY :</strong>
+                                            <span t-esc="doc.sudo().mini_book_qty"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                            <!--                            <br/>-->
+
+
+                            <div>
+                                <t t-if="any(line.at_type == 'lamination' for line in doc.sudo().order_line)">
+                                    <table style="width:100%; border-collapse: collapse; margin-top: 5px;">
+                                        <thead>
+                                            <tr style="background-color: #dcdcdc;">
+                                                <th style="border: 1px solid black; padding: 6px; width:30%;">
+                                                    LAMINATION
+                                                </th>
+                                                <th style="border: 1px solid black; padding: 6px; width:10%;">QTY</th>
+
+                                                <th style="border: 1px solid black; padding: 6px; width:20%;">AMOUNT
+                                                </th>
+                                                <th style="border: 1px solid black; padding: 6px; width:40%;">REMARKS
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.sudo().order_line.filtered(lambda l: l.at_type == 'lamination')"
+                                               t-as="line">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.total_price_with_tax"/>
+                                                    </td>
+
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.remarks"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+
+
+                                <div class="watermark" style="text-align: center;">Alukkas Colorlab LLP</div>
+
+                                <style>
+                                    .watermark {
+                                    position: absolute;
+                                    top: 50%;
+                                    transform: translate(-50%, -50%) rotate(-30deg);
+                                    font-size: 70px; /* REDUCED SIZE */
+                                    font-weight: bold;
+                                    color: rgba(0, 0, 0, 0.12);
+                                    z-index: 0;
+                                    pointer-events: none;
+                                    white-space: nowrap;
+                                    }
+
+                                    .page {
+                                    position: relative;
+                                    z-index: 10;
+                                    }
+                                </style>
+
+
+                                <!-- Frame Table -->
+                                <t t-if="any(line.at_type == 'frame' for line in doc.sudo().order_line)">
+                                    <table style="width:100%; border-collapse: collapse; margin-top: 5px;">
+                                        <thead>
+                                            <tr style="background-color: #dcdcdc;">
+                                                <th style="border: 1px solid black; padding: 6px; width:30%;">FRAME</th>
+                                                <th style="border: 1px solid black; padding: 6px; width:10%;">QTY</th>
+                                                <th style="border: 1px solid black; padding: 6px; width:20%;">AMOUNT
+                                                </th>
+
+                                                <th style="border: 1px solid black; padding: 6px; width:40%;">
+                                                    DESCRIPTION
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.sudo().order_line.filtered(lambda l: l.at_type == 'frame')"
+                                               t-as="line">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.total_price_with_tax"/>
+                                                    </td>
+
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.remarks"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <!--                                <br/>-->
+                                <!-- cover Table -->
+                                <t t-if="any(line.at_type == 'cover' for line in doc.sudo().order_line)">
+                                    <table style="width:100%; border-collapse: collapse; margin-top: 5px;">
+                                        <thead>
+                                            <tr style="background-color: #dcdcdc;">
+                                                <th style="border: 1px solid black; padding: 6px; width:30%;">COVER</th>
+                                                <th style="border: 1px solid black; padding: 6px; width:10%;">QTY</th>
+                                                <th style="border: 1px solid black; padding: 6px; width:20%;">AMOUNT
+                                                </th>
+
+                                                <th style="border: 1px solid black; padding: 6px; width:40%;">
+                                                    DESCRIPTION
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.sudo().order_line.filtered(lambda l: l.at_type == 'cover')"
+                                               t-as="line">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-set="cover_total"
+                                                           t-value="sum(doc.sudo().order_line.filtered(lambda l: l.at_type=='cover').mapped('product_id.total_price_with_tax'))"/>
+
+                                                        <t t-set="making_total"
+                                                           t-value="sum(doc.sudo().order_line.filtered(lambda l: l.at_type=='making').mapped('product_id.total_price_with_tax'))"/>
+
+                                                        <t t-set="final_total" t-value="cover_total + making_total"/>
+                                                        <t t-esc="final_total"/>
+                                                        <!--                                                        <t t-esc="line.product_id.total_price_with_tax"/>-->
+                                                    </td>
+
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.remarks"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+
+                                <!-- cover Table -->
+                                <t t-if="any(line.at_type == 'calendar' for line in doc.sudo().order_line)">
+                                    <table style="width:100%; border-collapse: collapse; margin-top: 5px;">
+                                        <thead>
+                                            <tr style="background-color: #dcdcdc;">
+                                                <th style="border: 1px solid black; padding: 6px; width:30%;">CALENDAR
+                                                </th>
+                                                <th style="border: 1px solid black; padding: 6px; width:10%;">QTY</th>
+                                                <th style="border: 1px solid black; padding: 6px; width:20%;">AMOUNT
+                                                </th>
+
+                                                <th style="border: 1px solid black; padding: 6px; width:40%;">
+                                                    DESCRIPTION
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.sudo().order_line.filtered(lambda l: l.at_type == 'calendar')"
+                                               t-as="line">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.total_price_with_tax"/>
+                                                    </td>
+
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.remarks"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <!-- addons Table -->
+                                <t t-if="any(line.at_type == 'addons' for line in doc.sudo().order_line)">
+                                    <table style="width:100%; border-collapse: collapse; margin-top: 5px;">
+                                        <thead>
+                                            <tr style="background-color: #dcdcdc;">
+                                                <th style="border: 1px solid black; padding: 6px; width:30%;">ADDONS
+                                                </th>
+                                                <th style="border: 1px solid black; padding: 6px; width:10%;">QTY</th>
+                                                <th style="border: 1px solid black; padding: 6px; width:20%;">AMOUNT
+                                                </th>
+
+                                                <th style="border: 1px solid black; padding: 6px; width:40%;">
+                                                    DESCRIPTION
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.sudo().order_line.filtered(lambda l: l.at_type == 'addons')"
+                                               t-as="line">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.product_id.total_price_with_tax"/>
+                                                    </td>
+
+                                                    <td style="border: 1px solid black; padding: 6px;">
+                                                        <t t-esc="line.remarks"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <!-- addons Table -->
+
+                                <!--                                <t t-if="any(line.at_type == 'making' for line in doc.sudo().order_line)">-->
+                                <!--                                    <table style="width:100%; border-collapse: collapse; margin-top: 5px;">-->
+                                <!--                                        <thead>-->
+                                <!--                                            <tr style="background-color: #dcdcdc;">-->
+                                <!--                                                <th style="border: 1px solid black; padding: 6px; width:30%;">MAKING-->
+                                <!--                                                </th>-->
+                                <!--                                                <th style="border: 1px solid black; padding: 6px; width:10%;">QTY</th>-->
+                                <!--                                                <th style="border: 1px solid black; padding: 6px; width:20%;">AMOUNT-->
+                                <!--                                                </th>-->
+
+                                <!--                                                <th style="border: 1px solid black; padding: 6px; width:40%;">-->
+                                <!--                                                    DESCRIPTION-->
+                                <!--                                                </th>-->
+                                <!--                                            </tr>-->
+                                <!--                                        </thead>-->
+                                <!--                                        <tbody>-->
+                                <!--                                            <t t-foreach="doc.sudo().order_line.filtered(lambda l: l.at_type == 'making')"-->
+                                <!--                                               t-as="line">-->
+                                <!--                                                <tr>-->
+                                <!--                                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                                        <t t-esc="line.product_id.name"/>-->
+                                <!--                                                    </td>-->
+                                <!--                                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                                        <t t-esc="line.product_uom_qty"/>-->
+                                <!--                                                    </td>-->
+                                <!--                                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                                        <t t-esc="line.product_id.total_price_with_tax"/>-->
+                                <!--                                                    </td>-->
+
+                                <!--                                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                                        <t t-esc="line.remarks"/>-->
+                                <!--                                                    </td>-->
+                                <!--                                                </tr>-->
+                                <!--                                            </t>-->
+                                <!--                                        </tbody>-->
+                                <!--                                    </table>-->
+                                <!--                                </t>-->
+
+
+                            </div>
+
+
+                            <div style="text-align: right; margin-top: 20px;">
+                                <t t-set="show_mini_section" t-value="doc.sudo().is_mini_book_required"/>
+                                <t t-set="show_emboss_print" t-value="doc.sudo().is_emboss_print"/>
+
+                                <!--    <p>-->
+                                <!--        <strong  style="margin-right: 110px;">Order Line Total</strong>-->
+                                <!--                ₹-->
+                                <!--        <span t-esc="doc.sudo().order_line_total"/>-->
+                                <!--    </p>-->
+                                <p>
+                                    <strong style="margin-right: 90px;">Product Rate</strong>
+                                    ₹
+                                    <span t-esc="doc.sudo().at_rate_total"/>
+                                </p>
+
+                                <t t-if="show_mini_section">
+                                    <p>
+                                        <strong style="margin-right: 120px;">Mini Total</strong>
+                                        ₹
+                                        <span t-esc="doc.sudo().mini_total"/>
+                                    </p>
+                                </t>
+
+                                <t t-if="show_emboss_print">
+
+                                    <p>
+                                        <strong style="margin-right: 120px;">Emboss Print Total</strong>
+                                        ₹
+                                        <span t-esc="doc.sudo().emboss_print_total"/>
+                                    </p>
+                                </t>
+
+                                <p>
+                                    <strong style="margin-right: 120px;">Total</strong>
+                                    ₹
+                                    <span t-esc="doc.sudo().amount_total"/>
+                                </p>
+
+
+                            </div>
+
+                            <div style="text-align: left; margin-top: 20px;">
+                                <h6 style="font-weight: 700; margin-bottom: 8px;">
+                                    Terms and Conditions
+                                </h6>
+                                <p>
+                                    1. This is only a quotation and is valid for 15 days. All rates include 18% GST.
+                                    <br/>
+                                    2. Changes can be made before confirmation. Please verify the final details with the
+                                    sale order.
+                                    <br/>
+                                    3. Materials and colours must be confirmed (subject to availability).
+                                    <br/>
+                                    4. Work will proceed only upon 100% advance payment, and cancellations are not
+                                    permitted.
+                                </p>
+                            </div>
+
+
+                        </div>
+                        <div class="footer" style="text-align: center; font-size: 15px; color: #888;">
+                            © 2025 Alukkas Colorlab LLP | www.alukkascolorlab.com
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+
+        </t>
+    </template>
+</odoo>

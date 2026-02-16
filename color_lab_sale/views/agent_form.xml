@@ -1,0 +1,212 @@
+<odoo>
+    <data>
+
+        <record id="view_agent_form_tree" model="ir.ui.view">
+            <field name="name">agent.form.list</field>
+            <field name="model">agent.form</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <list string="Agent Form" sample="1" multi_edit="1">
+                    <field name="name" string="Name"/>
+                    <field name="phone" class="o_force_ltr" optional="show"/>
+                    <field name="mobile" optional="hide"/>
+                    <field name="email" optional="show"/>
+                    <field name="street" optional="hide"/>
+                    <field name="city" optional="show"/>
+                    <field name="state_id" optional="hide" readonly="1"/>
+                    <field name="country_id" optional="show" readonly="1"/>
+                    <field name="vat" optional="hide" readonly="1"/>
+                    <field name="category_id" optional="hide" widget="many2many_tags"
+                           options="{'color_field': 'color'}"/>
+                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                </list>
+            </field>
+        </record>
+        <record id="view_agent_form" model="ir.ui.view">
+            <field name="name">agent.form.view</field>
+            <field name="model">agent.form</field>
+            <field name="arch" type="xml">
+                <form string="Agent">
+                    <header>
+                        <button name="action_create_user" type="object" class="oe_highlight"
+                                invisible="state != 'draft'"
+                                string="Confirm"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="show_partner" string="Contact Details"
+                                    class="oe_stat_button" icon="fa-address-book">
+                            </button>
+                            <button type="object" name="show_user" string="User Details"
+                                    class="oe_stat_button" icon="fa-user">
+                            </button>
+
+                        </div>
+                        <field name="image_1920" widget='image' class="oe_avatar"/>
+                        <div class="oe_title mb24">
+                            <!--                            <field name="agent_type" widget="radio" options="{'horizontal': true}"/>-->
+                            <field name="agent_type" widget="radio" options="{'horizontal': true}"
+                                   class="custom-radio"/>
+                            <h1>
+                                <field id="name" widget="text" class="text-break" name="name" default_focus="1"
+                                       placeholder="e.g. Lumber Inc"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <span class="o_form_label o_td_label o_address_type" name="address_name">
+                                    <span>Address</span>
+                                </span>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"
+                                           options="{'no_open': True, 'no_quick_create': True}"
+                                           context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <div name="partner_address_country" class="d-flex justify-content-between">
+                                        <field name="country_id" placeholder="Country" class="o_address_country"
+                                               options='{"no_open": True, "no_create": True}'/>
+                                    </div>
+                                </div>
+                                <field name="vat" placeholder="e.g. BE0477472701"/>
+                                <field name="partner_latitude"/>
+                                <field name="partner_longitude"/>
+                            </group>
+                            <group>
+                                <field name="phone" widget="phone" required="1"/>
+                                <field name="mobile" widget="phone" required="1"/>
+                                <field name="email" widget="email" context="{'gravatar_image': True}"/>
+                                <field name="website" string="Website" widget="url"
+                                       placeholder="e.g. https://www.odoo.com"/>
+                                <field name="title" options='{"no_open": True}' placeholder="e.g. Mister"/>
+                                <field name="lang"/>
+                                <field name="user_id"/>
+                                <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"
+                                       placeholder='e.g. "B2B", "VIP", "Consulting", ...'/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Customer &amp; Contacts" name="contact_addresses" autofocus="autofocus">
+                                <field name="child_ids" mode="kanban"
+                                       context="{'default_parent_id': id, 'default_street': street, 'default_street2': street2, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_lang': lang, 'default_user_id': user_id, 'default_type': 'other'}">
+                                    <kanban color="color">
+                                        <field name="color"/>
+                                        <field name="type"/>
+                                        <templates>
+                                            <t t-name="card" class="flex-row">
+                                                <aside class="o_kanban_aside_full">
+                                                    <field name="avatar_128" class="o_kanban_image_fill w-100"
+                                                           widget="image" options="{'img_class': 'object-fit-cover'}"
+                                                           alt="Contact image"/>
+                                                </aside>
+                                                <main class="ps-2 ps-md-0">
+                                                    <field name="name" class="fw-bold"/>
+                                                    <field name="email" widget="email"/>
+                                                    <div t-if="record.type.raw_value != 'customer'">
+                                                        <div>
+                                                            <field class="me-1" name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field class="me-1" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone:
+                                                        <field name="phone"/>
+                                                    </div>
+                                                    <div t-if="record.mobile.raw_value">Mobile:
+                                                        <field name="mobile"/>
+                                                    </div>
+                                                </main>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                    <form string="Contact / Address">
+                                        <sheet>
+                                            <field name="type" required="1" widget="radio"
+                                                   options="{'horizontal': true}"/>
+                                            <div class="text-muted oe_edit_only">
+                                                <p class="mb-0" invisible="type != 'customer'">
+                                                    <span>Use this to organize the contact details of employees of a
+                                                        given company (e.g. CEO, CFO, ...).
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <hr/>
+                                            <group>
+                                                <group>
+                                                    <field name="name" string="Contact Name"
+                                                           required="type == 'customer'"
+                                                           placeholder="e.g. New Address"/>
+                                                    <field name="title" options="{'no_open': True}"
+                                                           placeholder="e.g. Mr."
+                                                           invisible="type != 'customer'"/>
+                                                    <label for="street" string="Address"
+                                                           invisible="type == 'customer'"/>
+                                                    <div invisible="type == 'customer'">
+                                                        <div class="o_address_format" name="div_address">
+                                                            <field name="street" placeholder="Street..."
+                                                                   class="o_address_street"/>
+                                                            <field name="street2" placeholder="Street 2..."
+                                                                   class="o_address_street"/>
+                                                            <field name="city" placeholder="City"
+                                                                   class="o_address_city"/>
+                                                            <field name="state_id" class="o_address_state"
+                                                                   placeholder="State"
+                                                                   options="{'no_open': True, 'no_quick_create': True}"
+                                                                   context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                                            <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                                            <field name="country_id" placeholder="Country"
+                                                                   class="o_address_country"
+                                                                   options='{"no_open": True, "no_create": True}'/>
+                                                        </div>
+                                                    </div>
+                                                </group>
+                                                <group>
+                                                    <field name="email" widget="email"/>
+                                                    <field name="phone" widget="phone"/>
+                                                    <field name="mobile" widget="phone"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="comment" placeholder="Internal notes..." nolabel="1"/>
+                                            </group>
+                                            <field name="lang"
+                                                   invisible="True"/>  <!-- Need to add lang to save default value from parented record -->
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="commission_configuration" string="Commission Configuration"
+                                  invisible="agent_type != 'commission_agent'">
+                                <field name="commission_line_ids" string="Commission Lines">
+                                    <list editable="bottom">
+                                        <field name="printer_id" required="1"/>
+                                        <field name="name"/>
+                                        <field name="commission_percentage" type="measure" widget="percentage"
+                                               required="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                        <chatter/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="agent_form_action" model="ir.actions.act_window">
+            <field name="name">Agent Form</field>
+            <field name="res_model">agent.form</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_form_root" name="Agent Form" sequence="24"
+                  web_icon="color_lab_sale,static/description/icon.png"
+        />
+        <menuitem id="menu_form_agent" name="Agent Form" parent="menu_form_root" sequence="1"
+                  action="agent_form_action"/>
+    </data>
+</odoo>

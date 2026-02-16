@@ -1,0 +1,21 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_agent_form,agent_form,model_agent_form,base.group_user,1,1,1,1
+access_agent_customer_form,agent_customer_form,model_agent_customer_form,base.group_user,1,1,1,1
+access_commission_conf,commission_conf,model_commission_conf,base.group_user,1,1,1,1
+access_product_brand,product_brand,model_product_brand,base.group_user,1,1,1,1
+access_printer_conf,printer_conf,model_printer_conf,base.group_user,1,1,1,1
+access_printer_service,printer_service,model_printer_service,base.group_user,1,1,1,1
+access_printer_package,printer_package,model_printer_package,base.group_user,1,1,1,1
+access_printer_package_line,printer_package_line,model_printer_package_line,base.group_user,1,1,1,1
+access_mini_book_conf,mini_book_conf,model_mini_book_conf,base.group_user,1,1,1,1
+access_work_category,work_category,model_work_category,base.group_user,1,1,1,1
+access_operation_work_orders,operation_work_orders,color_lab_sale.model_operation_work_orders,base.group_user,1,1,1,1
+access_operation_work_orders_admin,operation.work.orders admin,color_lab_sale.model_operation_work_orders,base.group_system,1,1,1,1
+access_operation_work_orders_user_group,operation.work.orders user group,color_lab_sale.model_operation_work_orders,color_lab_sale.group_work_order_users,1,1,1,1
+access_operation_work_orders_manager_group,operation.work.orders manager group,color_lab_sale.model_operation_work_orders,color_lab_sale.group_work_order_manager,1,1,1,1
+access_work_flow_change_wizard,work_flow_change_wizard,model_work_flow_change_wizard,base.group_user,1,1,1,1
+access_addons_conf,addons_conf,model_addons_conf,base.group_user,1,1,1,1
+access_at_product,at_product,model_at_product,base.group_user,1,1,1,1
+access_sales_title_conf,sales_title_conf,model_sales_title_conf,base.group_user,1,1,1,1
+access_courier_type_conf,courier_type_conf,model_courier_type_conf,base.group_user,1,1,1,1
+access_correction_work_order_report_wizard,correction_work_order_report_wizard,model_correction_work_order_report_wizard,base.group_user,1,1,1,1

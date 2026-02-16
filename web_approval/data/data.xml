@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="approval_summary" name="approval_summary">
+        <div class="crm_lead_merge_summary">
+            <div class="text-success m-2">
+                Request has been approved.
+            </div>
+        </div>
+    </template>
+
+    <template id="approval_comment_summary" name="approval_comment_summary">
+        <div class="crm_lead_merge_summary">
+            <div class="text-danger m-2">
+                <strong t-esc="title"/>
+                <br/>
+                <br/>
+                <span class="fst-italic" t-esc="comment"/>
+            </div>
+        </div>
+    </template>
+
+    <record id="mail_activity_approval" model="mail.activity.type">
+        <field name="name">Approval</field>
+        <field name="icon">fa-check</field>
+        <field name="summary">Approval Request</field>
+        <field name="category">approval</field>
+        <field name="decoration_type">warning</field>
+        <field name="delay_unit">days</field>
+        <field name="delay_count">8</field>
+    </record>
+
+    <record id="mail_activity_approval_purchase" model="mail.activity.type">
+        <field name="name">Purchase Order Approval</field>
+        <field name="icon">fa-sign-in</field>
+    </record>
+
+<!--    <record id="mail_template_approval_purchase" model="mail.template">-->
+<!--        <field name="name">Approval</field>-->
+<!--        <field name="model_id" ref="web_approval.model_approval_mixin"/>-->
+<!--        <field name="use_default_to" eval="True"/>-->
+<!--        <field name="email_from">${(object.name.email) | safe}</field>-->
+<!--        <field name="lang">${object.env.context.get("lang")}</field>-->
+<!--        <field name="subject">Approval Status</field>-->
+<!--    </record>-->
+
+</odoo>

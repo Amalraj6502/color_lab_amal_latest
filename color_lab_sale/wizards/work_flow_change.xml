@@ -1,0 +1,51 @@
+<odoo>
+    <data>
+
+        <!--        <menuitem id="work_flow_change_menu"-->
+        <!--                  name="Work Flo" parent="mrp.menu_mrp_reporting" action="work_flow_change_action"/>-->
+
+
+        <record id="work_flow_change_wizard_view" model="ir.ui.view">
+            <field name="name">Work Flow Change Wizard</field>
+            <field name="model">work.flow.change.wizard</field>
+            <field name="arch" type="xml">
+                <form name="Work Flow Change Report">
+                    <group>
+                        <group name="main_info">
+                            <field name="sale_order_id" invisible="1"/>
+                            <field name="type" required="1" readonly="1" force_save="1"/>
+                            <field name="current_category_id" readonly="1" force_save="1"/>
+                            <field name="current_normal_order_status" invisible="type != 'normal'"/>
+                            <field name="current_minibook_order_status" invisible="type != 'minibook'"/>
+                            <field name="current_addons_order_status" invisible="type != 'addons'"/>
+                            <field name="category_domain" invisible="1"/>
+
+                        </group>
+                        <group name="date_to">
+                            <field name="date" readonly="1" force_save="1"/>
+                            <field name="new_category_id" domain="category_domain"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <field name="reason" required="1" placeholder="Please brief the reason here..  "/>
+                    </group>
+                    <footer>
+                        <button
+                                name="action_confirm"
+                                string="Confirm Change"
+                                type="object"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="work_flow_change_action" model="ir.actions.act_window">
+            <field name="name">Work Flow Change</field>
+            <field name="res_model">work.flow.change.wizard</field>
+            <field name="view_mode">form</field>
+            <!--            <field name="target">new</field>-->
+            <field name="view_id" ref="color_lab_sale.work_flow_change_wizard_view"/>
+        </record>
+
+    </data>
+</odoo>

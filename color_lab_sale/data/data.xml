@@ -1,0 +1,409 @@
+<odoo>
+    <data>
+        <!--NORMAL FLOW STARTS-->
+        <record id="correction_normal" model="work.category">
+            <field name="step_count">1</field>
+            <field name="name">Correction</field>
+            <field name="type">normal</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_correction_users'))]"></field>
+            <field name="is_step_bypass">1</field>
+        </record>
+        <record id="board_normal" model="work.category">
+            <field name="step_count">1</field>
+            <field name="name">Board</field>
+            <field name="type">normal</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_board_users'))]"></field>
+
+        </record>
+        <record id="cover_print_normal" model="work.category">
+            <field name="step_count">1</field>
+            <field name="name">Cover Print</field>
+            <field name="type">normal</field>
+            <field name="section">3</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_print_users'))]"></field>
+
+        </record>
+
+        <record id="printing_normal" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.correction_normal"/>
+            <field name="name">Printing</field>
+            <field name="type">normal</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_printing_users'))]"></field>
+
+        </record>
+        <record id="window_cut_normal" model="work.category">
+            <field name="step_count">3</field>
+            <field name="previous_step" ref="color_lab_sale.printing_normal"/>
+            <field name="name">Window Cut</field>
+            <field name="type">normal</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_window_cut_users'))]"></field>
+
+        </record>
+        <record id="lamination_pin_normal" model="work.category">
+            <field name="step_count">4</field>
+            <field name="previous_step" ref="color_lab_sale.window_cut_normal"/>
+            <field name="name">Lamination / PIN</field>
+            <field name="type">normal</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_lamination_users'))]"></field>
+
+        </record>
+        <record id="cake_normal" model="work.category">
+            <field name="step_count">5</field>
+            <field name="previous_step" ref="color_lab_sale.lamination_pin_normal"/>
+            <field name="name">Cake</field>
+            <field name="type">normal</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cake_users'))]"></field>
+
+        </record>
+
+        <record id="cover_lam_normal" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.cover_print_normal"/>
+            <field name="name">Cover Lam</field>
+            <field name="type">normal</field>
+            <field name="section">3</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_lam_users'))]"></field>
+
+        </record>
+
+        <record id="cover_finish_normal" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="is_common_step">true</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cover_lam_normal'), ref('color_lab_sale.board_normal')])]"/>
+            <field name="name">Cover Finish</field>
+            <field name="type">normal</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_finish_users'))]"></field>
+
+        </record>
+
+        <!--NORMAL FLOW ENDS-->
+
+        <!--MINIBOOK FLOW STARTS-->
+        <record id="correction_minibook" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Correction</field>
+            <field name="type">minibook</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_correction_users'))]"></field>
+            <field name="is_step_bypass">1</field>
+        </record>
+
+        <record id="board_minibook" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Board</field>
+            <field name="type">minibook</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_board_users'))]"></field>
+
+        </record>
+        <record id="cover_print_minibook" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Cover Print</field>
+            <field name="type">minibook</field>
+            <field name="section">3</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_print_users'))]"></field>
+
+        </record>
+        <record id="printing_minibook" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.correction_minibook"/>
+            <field name="name">Printing</field>
+            <field name="type">minibook</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_printing_users'))]"></field>
+
+        </record>
+        <record id="window_cut_minibook" model="work.category">
+            <field name="step_count">3</field>
+            <field name="previous_step" ref="color_lab_sale.printing_minibook"/>
+            <field name="name">Window Cut</field>
+            <field name="type">minibook</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_window_cut_users'))]"></field>
+
+        </record>
+        <record id="lamination_pin_minibook" model="work.category">
+            <field name="step_count">4</field>
+            <field name="previous_step" ref="color_lab_sale.window_cut_minibook"/>
+            <field name="name">Lamination / PIN</field>
+            <field name="type">minibook</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_lamination_users'))]"></field>
+
+        </record>
+        <record id="cake_minibook" model="work.category">
+            <field name="step_count">5</field>
+            <field name="previous_step" ref="color_lab_sale.lamination_pin_minibook"/>
+            <field name="name">Cake</field>
+            <field name="type">minibook</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cake_users'))]"></field>
+
+        </record>
+        <record id="cover_lam_minibook" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.cover_print_minibook"/>
+            <field name="name">Cover Lam</field>
+            <field name="type">minibook</field>
+            <field name="section">3</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_lam_users'))]"></field>
+
+        </record>
+        <record id="cover_finish_minibook" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="is_common_step">true</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cover_lam_minibook'), ref('color_lab_sale.board_minibook')])]"/>
+            <field name="name">Cover Finish</field>
+            <field name="type">minibook</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_finish_users'))]"></field>
+
+        </record>
+        <!--MINIBOOK FLOW ENDS-->
+
+        <!--ADDONS FLOW STARTS-->
+        <record id="board_addons" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Board</field>
+            <field name="type">addons</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_board_users'))]"></field>
+
+        </record>
+        <record id="cover_print_addons" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Cover Print</field>
+            <field name="type">addons</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_print_users'))]"></field>
+
+        </record>
+        <record id="cover_lam_addons" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.cover_print_addons"/>
+            <field name="name">Cover Lam</field>
+            <field name="type">addons</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_lam_users'))]"></field>
+
+        </record>
+        <record id="cover_finish_addons" model="work.category">
+            <field name="step_count">3</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="is_common_step">true</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cover_lam_addons'), ref('color_lab_sale.board_addons')])]"/>
+            <field name="name">Cover Finish</field>
+            <field name="type">addons</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_finish_users'))]"></field>
+
+        </record>
+        <!--ADDONS FLOW ENDS-->
+
+        <!--FRAME FLOW STARTS-->
+        <record id="board_frame" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Board</field>
+            <field name="type">frame</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_board_users'))]"></field>
+
+        </record>
+        <record id="cover_print_frame" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Cover Print</field>
+            <field name="type">frame</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_print_users'))]"></field>
+
+        </record>
+        <record id="cover_lam_frame" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.cover_print_frame"/>
+            <field name="name">Cover Lam</field>
+            <field name="type">frame</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_lam_users'))]"></field>
+
+        </record>
+        <record id="cover_finish_frame" model="work.category">
+            <field name="step_count">3</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="is_common_step">true</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cover_lam_frame'), ref('color_lab_sale.board_frame')])]"/>
+            <field name="name">Cover Finish</field>
+            <field name="type">frame</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_finish_users'))]"></field>
+
+        </record>
+
+        <!--FRAME FLOW ENDS-->
+        <!--CALENDER FLOW STARTS-->
+        <record id="board_calender" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Board</field>
+            <field name="type">calender</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_board_users'))]"></field>
+
+        </record>
+        <record id="cover_print_calender" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Cover Print</field>
+            <field name="type">calender</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_print_users'))]"></field>
+
+        </record>
+        <record id="cover_lam_calender" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.cover_print_calender"/>
+            <field name="name">Cover Lam</field>
+            <field name="type">calender</field>
+            <field name="section">2</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_lam_users'))]"></field>
+
+        </record>
+        <record id="cover_finish_calender" model="work.category">
+            <field name="step_count">3</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="is_common_step">true</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cover_lam_calender'), ref('color_lab_sale.board_calender')])]"/>
+            <field name="name">Cover Finish</field>
+            <field name="type">calender</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_finish_users'))]"></field>
+
+        </record>
+
+        <!--CALENDER FLOW ENDS-->
+
+        <!--DIGITAL PRINT START-->
+        <record id="coverprinting_digital" model="work.category">
+            <field name="step_count">1</field>
+            <!--            <field name="previous_step"></field>-->
+            <field name="name">Cover Printing</field>
+            <field name="type">digital</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_cover_print_users'))]"></field>
+
+        </record>
+        <record id="finish_digital" model="work.category">
+            <field name="step_count">2</field>
+            <field name="previous_step" ref="color_lab_sale.coverprinting_digital"/>
+            <field name="name">Finish</field>
+            <field name="type">digital</field>
+            <field name="section">1</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_finishing_users'))]"></field>
+
+        </record>
+
+        <!--DIGITAL PRINT END-->
+
+
+        <record id="album_normal" model="work.category">
+            <field name="step_count">0</field>
+            <field name="is_common_step">true</field>
+            <field name="name">Album</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cake_normal'), ref('color_lab_sale.cover_finish_normal')])]"/>
+            <field name="type">normal</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_album_users'))]"></field>
+
+        </record>
+
+        <record id="album_minibook" model="work.category">
+            <field name="step_count">0</field>
+            <field name="is_common_step">true</field>
+            <field name="common_step_ids"
+                   eval="[Command.set([ref('color_lab_sale.cake_minibook'), ref('color_lab_sale.cover_finish_minibook')])]"/>
+            <field name="name">Album</field>
+            <field name="type">minibook</field>
+            <field name="group_ids" eval="[(4, ref('color_lab_sale.group_album_users'))]"></field>
+
+        </record>
+
+        <record id="product_minibook" model="product.product">
+            <field name="default_code">MINIBOOK10</field>
+            <field name="name">Mini Book</field>
+            <field name="is_storable" eval="True"/>
+            <field name="lst_price">100.0</field>
+            <field name="standard_price">70.0</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+            <field name="image_1920" type="base64" file="color_lab_sale/static/img/minibook.jpg"/>
+        </record>
+        <record id="product_emboss" model="product.product">
+            <field name="default_code">Emboss</field>
+            <field name="name">Emboss</field>
+            <field name="is_storable" eval="True"/>
+            <field name="lst_price">0.0</field>
+            <field name="standard_price">0</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="product_main_product" model="product.product">
+            <field name="default_code">Main Product</field>
+            <field name="name">Main Product</field>
+            <field name="is_storable" eval="True"/>
+            <field name="lst_price">0.0</field>
+            <field name="standard_price">0</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="service_photobook" model="printer.service">
+            <field name="name">PHOTOBOOK</field>
+            <field name="code">photobook</field>
+        </record>
+        <record id="service_package" model="printer.service">
+            <field name="name">PACKAGE</field>
+            <field name="code">package</field>
+        </record>
+        <record id="service_print" model="printer.service">
+            <field name="name">PRINT</field>
+            <field name="code">print</field>
+        </record>
+        <record id="service_repair" model="printer.service">
+            <field name="name">REPAIR</field>
+            <field name="code">repair</field>
+        </record>
+        <record id="service_reework" model="printer.service">
+            <field name="name">REEWORK</field>
+            <field name="code">reework</field>
+        </record>
+        <record id="service_laser" model="printer.service">
+            <field name="name">LASER</field>
+            <field name="code">laser</field>
+        </record>
+        <record id="service_order" model="printer.service">
+            <field name="name">ORDER</field>
+            <field name="code">order</field>
+        </record>
+
+    </data>
+</odoo>

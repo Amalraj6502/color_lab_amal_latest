@@ -1,0 +1,116 @@
+<odoo>
+    <data>
+        <!--        <record id="agent_subcustomer_rule" model="ir.rule">-->
+        <!--            <field name="name">Agent can only access their own subcustomers</field>-->
+        <!--            <field name="model_id" ref="color_lab_sale.model_agent_customer_form"/>-->
+        <!--            <field name="domain_force">[('parent_id', '=', user.partner_id.id)]</field>-->
+        <!--&lt;!&ndash;            <field name="groups" eval="[(4, ref('base.group_user'))]"/>&ndash;&gt;-->
+        <!--            <field name="groups"-->
+        <!--                   eval="[Command.link(ref('base.group_user')), Command.link(ref('color_lab_sale.group_account_check_users'))]"/>-->
+
+        <!--        </record>-->
+
+        <record id="agent_subcustomer_rule" model="ir.rule">
+            <field name="name">Agent can only access their own subcustomers</field>
+            <field name="model_id" ref="color_lab_sale.model_agent_customer_form"/>
+            <field name="domain_force">
+                ['|',
+                ('parent_id', '=', user.partner_id.id),
+                (1, '=', 1) if user.has_group('color_lab_sale.group_account_check_users') else (0, '=', 1)
+                ]
+            </field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="agent_subcustomer_admin_rule" model="ir.rule">
+            <field name="name">Admin: full access to all subcustomers</field>
+            <field name="model_id" ref="color_lab_sale.model_agent_customer_form"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record id="agent_rule" model="ir.rule">
+            <field name="name">User can see only their only agent details</field>
+            <field name="model_id" ref="color_lab_sale.model_agent_form"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!--        <record id="user_records_only_sale_rule" model="ir.rule">-->
+        <!--            <field name="name">Sales User can see only their only details</field>-->
+        <!--            <field name="model_id" ref="sale.model_sale_order"/>-->
+        <!--            <field name="domain_force">[('user_id', '=', user.id)]</field>-->
+        <!--            <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+        <!--        </record>-->
+
+        <record id="agent_admin_rule" model="ir.rule">
+            <field name="name">Admin: full access to all Agents</field>
+            <field name="model_id" ref="color_lab_sale.model_agent_form"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <record id="contact_agent_rule" model="ir.rule">
+            <field name="name">Restrict Contact Details</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">
+                ['|',
+                ('agent_id', '=', user.partner_id.agent_id.id),
+                ('agent_customer_id', 'in', user.partner_id.agent_id.child_ids.ids)
+                ]
+            </field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="agent_contact_admin_rule" model="ir.rule">
+            <field name="name">Admin: full access to all partners records</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <record id="order_users_partner_rule" model="ir.rule">
+            <field name="name">Order Users: Partner full access to Order Users</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('color_lab_sale.group_internal_salesorder_user'))]"/>
+        </record>
+
+        <record id="order_users_agent_rule" model="ir.rule">
+            <field name="name">Order Users: Agent full access to Order Users</field>
+            <field name="model_id" ref="color_lab_sale.model_agent_form"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('color_lab_sale.group_internal_salesorder_user'))]"/>
+        </record>
+
+        <!--        This is using for the hide records for the users which is not belongs to the exact group mentioned in category-->
+
+        <record id="operation_work_order_group_rule" model="ir.rule">
+            <field name="name">Operation Work Order: Group-based Access</field>
+            <field name="model_id" ref="color_lab_sale.model_operation_work_orders"/>
+            <field name="global" eval="False"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">
+                [
+                '&amp;',
+                '|',
+                ('group_ids', '=', False),
+                ('group_ids', 'in', user.groups_id.ids),
+                '|',
+                ('assigned_to', '=', False),
+                ('assigned_to', '=', user.id)
+                ]
+            </field>
+        </record>
+
+        <record id="operation_work_order_admin_rule" model="ir.rule">
+            <field name="name">Operation Work Order: Admin/Manager Full Access</field>
+            <field name="model_id" ref="color_lab_sale.model_operation_work_orders"/>
+            <field name="groups" eval="[(4, ref('base.group_system')), (4, ref('base.group_erp_manager')), (4, ref('color_lab_sale.group_work_order_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+    </data>
+</odoo>

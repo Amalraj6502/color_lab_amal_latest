@@ -1,0 +1,15 @@
+<odoo>
+    <record id="view_sale_order_filter_inherit" model="ir.ui.view">
+        <field name="name">sale.order.search.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='filter_create_date']" position="after">
+                <separator/>
+                <filter string="First Approved" name="first_approved" domain="[('is_first_approved', '=', True)]"/>
+                <filter string="Final Approved" name="final_approved" domain="[('is_final_approved', '=', True)]"/>
+                <filter string="Pending Approval" name="final_approved" domain="[('approval_state', '=', 'request')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

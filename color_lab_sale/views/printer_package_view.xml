@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="printer_package_tree">
+            <field name="name">Printer Package</field>
+            <field name="model">printer.package</field>
+            <field name="arch" type="xml">
+                <list string="Printer Package">
+                    <field name="name"/>
+                    <field name="partner_ids"/>
+                    <field name="printer_id"/>
+                    <field name="layouts"/>
+                    <!--                    <field name="number_of_sheets"/>-->
+                    <field name="description"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="printer_package_form">
+            <field name="name">printer.package.form</field>
+            <field name="model">printer.package</field>
+            <field name="arch" type="xml">
+                <form string="Printer Package Form">
+                    <header>
+                        <button name="action_approve" type="object" class="oe_highlight"
+                                invisible="state != 'draft'"
+                                string="Approve"/>
+                        <button name="reset_to_draft" type="object"
+                                invisible="state != 'approve'"
+                                confirm="This will remove the production sale order configuration."
+                                string="Reset to Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approve"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field id="name" widget="text" class="text-break" name="name" default_focus="1"
+                                       required="1" readonly="state != 'draft'"
+                                       placeholder="Package Name.."/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="title" readonly="state != 'draft'"/>
+                                <field name="description" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <!--                                <field name="agent_customer_domain" invisible="1"/>-->
+                                <!--                                <field name="agent_ids" widget="many2many_tags"/>-->
+                                <field name="partner_ids" widget="many2many_tags" invisible="not agent_ids"
+                                       domain="agent_customer_domain" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="printer_id" readonly="state != 'draft'"/>
+                                <field name="layouts" readonly="state != 'draft'"/>
+                                <!--                                <field name="number_of_sheets"/>-->
+                                <field name="type" invisible="1"/>
+                            </group>
+
+                            <group>
+                                <field name="currency_id" invisible="1"/>
+
+                                <label for="at_product" string="Choose the Main Product"/>
+                                <div class="o_row g-0 d-flex">
+                                    <div class="o_row flex-grow-1">
+                                        <field name="at_product" class="text-start text-truncate" required="1"
+                                               readonly="state != 'draft'"
+                                               domain="[('printer_id','=',printer_id)]"/>
+                                        /
+                                    </div>
+                                    <field name="at_size" class="oe_inline text-start text-truncate" required="1"
+                                           readonly="state != 'draft'"/>
+                                    <label for="at_page" string="Page" class="oe_inline"/>
+                                    <field name="at_page" class="oe_inline text-start text-truncate"
+                                           required="type == 'package'" readonly="state != 'draft'"/>
+                                    <label for="at_rate" string="Rate" class="oe_inline"/>
+                                    <field name="at_rate" required="1" readonly="state != 'draft'"/>
+                                    <!--                                <span class="fw-bold text-nowrap">To Produce</span>-->
+                                </div>
+                                <field name="max_addon_size" required="1" readonly="state != 'draft'"/>
+                                <field name="is_warning_required" readonly="state != 'draft'"/>
+                            </group>
+                            <group string="Mini Book Section">
+                                <field name="is_mini_book_required" widget="boolean_toggle"/>
+                                <field name="mini_book_count" invisible="1"
+                                />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Order Lines" name="order_lines">
+                                <field
+                                        name="package_line_ids"
+                                        mode="list"
+                                        readonly="state != 'draft'">
+                                    <list string="Package Lines" editable="bottom">
+                                        <field name="at_type" required="1"/>
+                                        <field name="at_product_template_id" domain="[('at_type','=',at_type)]"
+                                               required="1"/>
+                                        <field name="product_id" required="1"
+                                               domain="[('at_type','=',at_type),('at_product_template_id','=',at_product_template_id)]"/>
+                                        <field name="product_template_id" column_invisible="1"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_qty"/>
+                                        <field name="product_uom"/>
+                                        <field name="price_unit"/>
+                                        <field name="currency_id" invisible="1" column_invisible="1"/>
+                                        <field name="price_subtotal" sum="Total"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page name="minibook" string="Mini Book" invisible="not is_mini_book_required">
+                                <group>
+                                    <group>
+                                        <field name="mini_book_conf"/>
+                                    </group>
+                                    <group>
+                                        <field name="mini_book_height"/>
+                                        <field name="mini_book_length"/>
+                                        <field name="mini_book_width"/>
+                                    </group>
+                                    <group>
+                                        <field name="mini_book_qty"/>
+                                        <field name="mini_book_amount"/>
+                                        <field name="mini_book_remarks"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                        <!--                        <div class="d-flex justify-content-between align-items-center oe_subtotal_footer">-->
+                        <!--                            <span class="fw-bold text-muted fs-4">Package Total:</span>-->
+                        <!--                            <span class="text-end text-primary fw-bold fs-2">-->
+                        <!--                                <strong>-->
+                        <!--                                    <field name="package_price" nolabel="1" readonly="0"/>-->
+                        <!--                                </strong>-->
+                        <!--                            </span>-->
+                        <!--                        </div>-->
+                        <group class="oe_subtotal_footer" name="other_total">
+                            <field name="mini_total" widget="monetary"
+                                   invisible="not is_mini_book_required" readonly="1"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <div class="oe_inline o_td_label">
+                                <label for="package_price"/>
+                            </div>
+                            <field name="package_price" nolabel="1" widget="monetary" readonly="0" force_save="1"
+                                   options="{'currency_field': 'currency_id'}"
+                            />
+                        </group>
+
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        <record id="printer_package_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Package</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('type','=','package')]</field>
+            <field name="context">{'default_type': 'package'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer Package</p>
+            </field>
+        </record>
+
+        <record id="printer_photobook_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Photobook</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('type','=','photobook')]</field>
+            <field name="context">{'default_type': 'photobook'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer PhotoBook</p>
+            </field>
+        </record>
+
+        <!--        NEW-->
+
+        <record id="printer_print_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Print</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('type','=','print')]</field>
+            <field name="context">{'default_type': 'print'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer Print</p>
+            </field>
+        </record>
+
+        <record id="printer_repair_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Repair</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('type','=','repair')]</field>
+            <field name="context">{'default_type': 'repair'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer Repair</p>
+            </field>
+        </record>
+
+        <record id="printer_reework_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Reework</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('type','=','reework')]</field>
+            <field name="context">{'default_type': 'reework'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer Reework</p>
+            </field>
+        </record>
+
+        <record id="printer_laser_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer laser</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('type','=','laser')]</field>
+            <field name="context">{'default_type': 'laser'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Printer Laser</p>
+            </field>
+        </record>
+
+        <menuitem id="printer_service_menu" parent="color_lab_sale.configuration_main_custom_menu"
+                  name="Printer Service types"/>
+
+        <menuitem id="printer_package_menu" parent="color_lab_sale.printer_service_menu" name="Printer Packages"
+                  action="printer_package_menu_action"/>
+
+        <menuitem id="printer_photobook_menu" parent="color_lab_sale.printer_service_menu"
+                  name="Printer Photobook"
+                  action="printer_photobook_menu_action"/>
+
+        <menuitem id="printer_print_menu" parent="color_lab_sale.printer_service_menu"
+                  name="Printer Print"
+                  action="printer_print_menu_action"/>
+
+        <menuitem id="printer_repair_menu" parent="color_lab_sale.printer_service_menu"
+                  name="Printer Repair"
+                  action="printer_repair_menu_action"/>
+
+        <menuitem id="printer_reework_menu" parent="color_lab_sale.printer_service_menu"
+                  name="Printer Reework"
+                  action="printer_reework_menu_action"/>
+
+        <menuitem id="printer_laser_menu" parent="color_lab_sale.printer_service_menu"
+                  name="Printer Laser"
+                  action="printer_laser_menu_action"/>
+
+    </data>
+</odoo>

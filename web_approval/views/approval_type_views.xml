@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="approval_template_type_list_view" model="ir.ui.view">
+			<field name="name">approval.template.type.list</field>
+			<field name="model">approval.template.type</field>
+			<field name="arch" type="xml">
+				<list>
+					<field name="name"/>
+				</list>
+			</field>
+		</record>
+
+		<record id="approval_template_type_form_view" model="ir.ui.view">
+			<field name="name">approval.template.type.form</field>
+			<field name="model">approval.template.type</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<label for="name" string="Name"/>
+						<h1>
+							<field name="name" default_focus="1" placeholder="e.g. Purchase Order" nolabel="1"/>
+						</h1>
+						<group>
+							<group string="Technical">
+								<field name="res_model_id"/>
+								<field name="res_model_name"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="approval_template_type_action" model="ir.actions.act_window">
+			<field name="name">Approval Type</field>
+			<field name="res_model">approval.template.type</field>
+			<field name="view_mode">list,form</field>
+		</record>
+
+		<menuitem id="menu_approval_template_type" name="Approval Types" sequence="10"
+		          action="web_approval.approval_template_type_action" parent="menu_approvals"/>
+
+	</data>
+</odoo>
