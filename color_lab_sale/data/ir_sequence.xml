@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <record id="quotation_sequence" model="ir.sequence">
+            <field name="name">Sale Quotation Sequence</field>
+            <field name="code">sale.quotation.sequence</field>
+            <field name="prefix">Q%(y)s</field>
+            <field name="padding">5</field>
+            <field name="company_id"></field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,114 @@
+<odoo>
+    <data>
+        <template id="sale_order_report_document_inherit" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[@name='so_total_summary']" position="replace">
+                <div class="clearfix" name="so_total_summary">
+                    <div id="total" class="row mt-n3" name="total">
+                        <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                            <table class="o_total_table table table-borderless">
+                                <!-- MiniBook Total -->
+                                <tr>
+                                    <td>Minibook Total</td>
+                                    <td class="text-end">
+                                        <span t-esc="doc.mini_total"/>
+                                        <span t-esc="doc.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+
+                                <!-- Package Product Rate -->
+                                <tr>
+                                    <td>Package Product Rate</td>
+                                    <td class="text-end">
+                                        <span t-esc="doc.at_rate"/>
+                                        <span t-esc="doc.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+
+                                <!-- Emboss Print Rate -->
+                                <tr>
+                                    <td>Emboss Print Rate</td>
+                                    <td class="text-end">
+                                        <span t-esc="doc.emboss_print_rate"/>
+                                        <span t-esc="doc.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+
+                                <!-- Tax totals -->
+                                <t t-call="sale.document_tax_totals">
+                                    <t t-set="tax_totals" t-value="doc.tax_totals"/>
+                                    <t t-set="currency" t-value="doc.currency_id"/>
+                                </t>
+
+                                <!-- Grand Total - Enhanced Styling -->
+                                <tr class="border-top">
+                                    <td class="pt-2">
+                                        <strong class="fs-5" style="color: #2c3e50;">GRAND TOTAL</strong>
+                                    </td>
+                                    <td class="text-end pt-2">
+                                        <strong class="fs-5" style="color: #2c3e50;">
+                                            <span t-esc="doc.amount_total"/>
+                                            <span t-esc="doc.currency_id.symbol"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--                <div class="clearfix" name="so_total_summary">-->
+                <!--                    <div id="total" class="row mt-n3" name="total">-->
+                <!--                        <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">-->
+                <!--                            <table class="o_total_table table table-borderless">-->
+                <!--                                <tr>-->
+                <!--                                    <td>-->
+                <!--                                        <strong>Minibook Total</strong>-->
+                <!--                                    </td>-->
+                <!--                                    <td class="text-end">-->
+                <!--                                        <span t-esc="doc.mini_total"/>-->
+                <!--                                        <span t-esc="doc.currency_id.symbol"/>-->
+                <!--                                    </td>-->
+                <!--                                </tr>-->
+
+                <!--                                <tr>-->
+                <!--                                    <td>-->
+                <!--                                        <strong>Package Product Rate</strong>-->
+                <!--                                    </td>-->
+                <!--                                    <td class="text-end">-->
+                <!--                                        <span t-esc="doc.at_rate"/>-->
+                <!--                                        <span t-esc="doc.currency_id.symbol"/>-->
+                <!--                                    </td>-->
+                <!--                                </tr>-->
+
+                <!--                                <tr>-->
+                <!--                                    <td>-->
+                <!--                                        <strong>Emboss Print Rate</strong>-->
+                <!--                                    </td>-->
+                <!--                                    <td class="text-end">-->
+                <!--                                        <span t-esc="doc.emboss_print_rate"/>-->
+                <!--                                        <span t-esc="doc.currency_id.symbol"/>-->
+                <!--                                    </td>-->
+                <!--                                </tr>-->
+
+                <!--                                <t t-call="sale.document_tax_totals">-->
+                <!--                                    <t t-set="tax_totals" t-value="doc.tax_totals"/>-->
+                <!--                                    <t t-set="currency" t-value="doc.currency_id"/>-->
+                <!--                                </t>-->
+
+                <!--                                <tr class="border-top">-->
+                <!--                                    <td>-->
+                <!--                                        <strong>Grand Total</strong>-->
+                <!--                                    </td>-->
+                <!--                                    <td class="text-end">-->
+                <!--                                        <span t-esc="doc.grand_total"/>-->
+                <!--                                        <span t-esc="doc.currency_id.symbol"/>-->
+                <!--                                    </td>-->
+                <!--                                </tr>-->
+                <!--                            </table>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+            </xpath>
+        </template>
+    </data>
+</odoo>

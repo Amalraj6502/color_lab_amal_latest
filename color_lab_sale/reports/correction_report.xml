@@ -1,0 +1,169 @@
+<odoo>
+    <record id="paperformat_correction_report" model="report.paperformat">
+        <field name="name">Correction Report Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">25</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_correction_work_order_report" model="ir.actions.report">
+        <field name="name">Correction Work Order Report</field>
+        <field name="model">correction.work.order.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">color_lab_sale.correction_work_order_report_template</field>
+        <field name="report_file">color_lab_sale.correction_work_order_report_template</field>
+        <field name="print_report_name">'Correction_Work_Order_Report'</field>
+        <field name="paperformat_id" ref="color_lab_sale.paperformat_correction_report"/>
+    </record>
+
+    <template id="correction_work_order_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="header" style="border-bottom: none; padding-bottom: 0px;">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)"
+                                 style="max-height: 80px; margin-bottom: 0px;" alt="Logo"/>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div class="row text-muted" style="border-top: 1px solid black; padding-top: 5px; font-size: 12px;">
+                        <div class="col-8">
+                            <span t-field="res_company.email"/>
+                            <span t-if="res_company.website" class="ms-2" t-field="res_company.website"/>
+                        </div>
+                        <div class="col-4 text-end">
+                            Page
+                            <span class="page"/>
+                            /
+                            <span class="topage"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="page">
+                    <h2 style="text-align:center; color: #B87333; margin-top: 2px; margin-bottom: 0px;text-decoration:underline;text-decoration-color:#B87333;">
+                        Correction Work Order Report
+                    </h2>
+
+                    <p>
+                        <strong>Period :</strong>
+                        <span t-out="context.get('start_date')" t-options='{"widget": "date", "format": "dd-MM-yyyy"}'/>
+                        –
+                        <span t-out="context.get('end_date')" t-options='{"widget": "date", "format": "dd-MM-yyyy"}'/>
+                    </p>
+
+                    <!-- INITIALIZE -->
+                    <t t-set="orders"
+                       t-value="env['operation.work.orders'].sudo().browse(context.get('work_order_ids', []))"/>
+
+                    <t t-set="grouped_orders" t-value="{}"/>
+                    <t t-set="grand_total_pages" t-value="0"/>
+                    <t t-set="seq_count" t-value="1"/>
+
+                    <!-- GROUP -->
+                    <t t-foreach="orders" t-as="o">
+                        <t t-set="employee"
+                           t-value="o.assigned_to.name if o.assigned_to else 'Unassigned'"/>
+
+                        <t t-if="employee not in grouped_orders">
+                            <t t-set="grouped_orders"
+                               t-value="dict(grouped_orders, **{employee: []})"/>
+                        </t>
+
+                        <t t-set="grouped_orders"
+                           t-value="dict(grouped_orders, **{employee: grouped_orders[employee] + [o]})"/>
+                    </t>
+
+                    <!-- TABLE -->
+                    <table class="table table-sm table-borderless mt16">
+                        <thead>
+                            <tr style="background-color:#f0f3f5; border-bottom: 2px solid #dee2e6;">
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 50%;">Order Name</th>
+                                <th class="text-center">Completed Pages</th>
+                                <th class="text-center">Completion Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <t t-if="grouped_orders">
+                                <t t-foreach="grouped_orders.items()" t-as="group">
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td colspan="4" style="font-weight:bold;">
+                                            Employee:
+                                            <span t-esc="group[0]"/>
+                                        </td>
+                                    </tr>
+
+                                    <t t-set="employee_total_pages" t-value="0"/>
+
+                                    <t t-foreach="group[1]" t-as="order">
+                                        <tr>
+                                            <td>
+                                                <span t-esc="seq_count"/>
+                                                <t t-set="seq_count" t-value="seq_count + 1"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="order.name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="order.sale_order_id.at_page"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="order.completion_date"
+                                                      t-options='{"widget": "date", "format": "dd-MM-yyyy"}'/>
+                                            </td>
+                                        </tr>
+
+                                        <t t-set="employee_total_pages"
+                                           t-value="employee_total_pages + order.sale_order_id.at_page"/>
+                                        <t t-set="grand_total_pages"
+                                           t-value="grand_total_pages + order.sale_order_id.at_page"/>
+                                    </t>
+
+                                    <tr>
+                                        <td colspan="3" style="text-align:right; font-weight:bold;">
+                                            Total for <span t-esc="group[0]"/> :
+                                            <span t-esc="employee_total_pages"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </t>
+                            </t>
+
+                            <t t-if="not orders">
+                                <tr>
+                                    <td colspan="4" style="text-align:center;">
+                                        No records found for the selected criteria.
+                                    </td>
+                                </tr>
+                            </t>
+
+                            <tr style="background-color: #f0f3f5; border-top: 2px solid #dee2e6;">
+                                <td colspan="3" style="text-align:right; font-weight:bold;">
+                                    Grand Total :
+                                    <span t-esc="grand_total_pages"/>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

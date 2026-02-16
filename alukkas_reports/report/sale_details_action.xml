@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Define Paper Format First -->
+    <record id="credit_note_custom_paperformat" model="report.paperformat">
+        <field name="name"> Paper Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">38</field>
+        </record>
+
+    <!-- Define Report Action -->
+    <record id="action_normal_credit_note_custom_report" model="ir.actions.report">
+        <field name="name">work-order-form</field>
+        <field name="model">sale.order</field>
+        <field name="report_name">alukkas_reports.report_saleorder_document</field>
+        <field name="report_file">alukkas_reports.report_saleorder_document</field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="alukkas_reports.credit_note_custom_paperformat"/>
+        <field name="print_report_name">'W-%s' % (object.name)</field>
+    </record>
+
+
+    <record id="action_sale_order_new_view_report" model="ir.actions.report">
+        <field name="name">Quotation / Order</field>
+        <field name="model">sale.order</field>
+        <field name="report_name">alukkas_reports.report_saleorder_new_list</field>
+        <field name="report_file">alukkas_reports.report_saleorder_new_list</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="report_type">qweb-pdf</field>
+        <field name="binding_type">report</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="alukkas_reports.credit_note_custom_paperformat"/>
+        <field name="print_report_name">'Q-%s' % (object.name)</field>
+    </record>
+
+
+
+    <record id="action_sale_order_list_view_filter" model="ir.actions.report">
+        <field name="name">List / Report</field>
+        <field name="model">sale.order</field>
+        <field name="report_name">alukkas_reports.custom_quotation_report_list_filter</field>
+        <field name="report_file">alukkas_reports.custom_quotation_report_list_filter</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="report_type">qweb-pdf</field>
+        <field name="binding_type">report</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="alukkas_reports.credit_note_custom_paperformat"/>
+    </record>
+
+
+
+
+    <record id="sale_pdf_quote_builder.action_report_saleorder_raw" model="ir.actions.report">
+    <field name="binding_model_id" eval="False"/>
+    <field name="binding_type">report</field>
+</record>
+
+
+</odoo>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+	<t t-name="web_approval.ApprovalField">
+		<t t-set="values" t-value="this.state.values"/>
+		<div class="approval-flow border" t-if="values">
+			<h4 class="head">Approval Flow</h4>
+			<t t-set="step_count" t-value="1"/>
+
+			<ol class="steps">
+				<!-- PREVIOUS APPROVALS -->
+				<li t-if="value.approval_user"
+				    t-attf-class="step #{value.is_rejected ? 'is-reject' : 'is-approve'}"
+				    t-foreach="values.approved_vals" t-as="value"
+				    t-key="values.approved_vals.indexOf(value)" t-att-title="value.date_time" data-bs-toggle="tooltip">
+					<div class="text-truncate w-100" t-att-title="value.level">
+						<span>
+							<t t-esc="value.level"/>
+						</span>
+					</div>
+					<div t-attf-class="round-info #{value.is_rejected ? 'reject' : 'done'}">
+						<img class="o_Message_authorAvatar o_m2m_avatar w-100 h-100 rounded-circle o_object_fit_cover cursor-pointer o_redirect"
+						     t-attf-src="/web/image/res.partner/{{ value.approval_user.partner_id }}/avatar_128"
+						     t-on-click.stop="(ev) => this.onInfoClick(ev, value)"
+						     tabindex="0" t-attf-href="#id={{ value.approval_user.id }}&amp;model=res.users"/>
+					</div>
+					<div class="text-truncate w-100" t-att-title="value.approval_user.name">
+						<strong>
+							<t t-esc="value.approval_user.name"/>
+						</strong>
+					</div>
+					<div t-attf-class="status #{value.is_rejected ? 'reject' : 'approve'}">
+						<strong>
+							<t t-if="value.is_rejected" t-esc="'REJECTED'"/>
+							<t t-else="" t-esc="'APPROVED'"/>
+						</strong>
+					</div>
+					<t t-set="step_count" t-value="step_count + 1"/>
+				</li>
+
+				<!-- NEXT APPROVAL -->
+				<li t-if="values.next_approval" t-attf-class="step #{value.is_rejected ? '' : 'is-active'}"
+				    t-foreach="values.next_approval" t-as="value"
+				    t-key="values.next_approval.indexOf(value)">
+					<div class="text-truncate w-100" t-att-title="value.level">
+						<span>
+							<t t-esc="value.level"/>
+						</span>
+					</div>
+					<div class="round-info next" title="Next Approval">
+						<img class="o_Message_authorAvatar o_m2m_avatar w-100 h-100 rounded-circle o_object_fit_cover o_redirect"
+							 src="/web_approval/static/description/sandglass.png"
+						     tabindex="0"/>
+					</div>
+					<div class="text-truncate w-100" t-att-title="value.approval_user_title">
+						<strong>
+							<t t-esc="value.approval_user_names"/>
+						</strong>
+					</div>
+					<div class="status">
+						<strong>
+							PENDING
+						</strong>
+					</div>
+					<t t-set="step_count" t-value="step_count + 1"/>
+				</li>
+
+				<!-- UPCOMING APPROVALS -->
+				<li t-if="values.upcoming_approvals" class="step" t-att-data-step="step_count"
+				    t-foreach="values.upcoming_approvals" t-as="value"
+				    t-key="values.upcoming_approvals.indexOf(value)">
+					<div class="text-truncate w-100" t-att-title="value.level">
+						<span>
+							<t t-esc="value.level"/>
+						</span>
+					</div>
+					<div class="round-info upcoming" title="Upcoming Approval">
+						<t t-esc="step_count"/>
+					</div>
+					<div class="text-truncate w-100" t-att-title="value.approval_user_title">
+						<strong>
+							<t t-esc="value.approval_user_names"/>
+						</strong>
+					</div>
+					<div class="status">
+						<strong class="pending">
+							PENDING
+						</strong>
+					</div>
+					<t t-set="step_count" t-value="step_count + 1"/>
+				</li>
+				<li t-if="values.is_done" class="step">
+					<span>
+						Approvals Completed
+					</span>
+					<div class="round-info finish">
+						<i class="fa fa-check text-success"/>
+					</div>
+				</li>
+			</ol>
+		</div>
+	</t>
+	<t t-name="web_approval.ApproverInfoPopOver">
+		<div class="pt-1 pb-1">
+			<t t-set="this.props.data" t-as="value"/>
+			<div class="px-2">
+				<div>
+					<table>
+						<tr>
+							<td colspan="2">
+								<div class="text-center m-2">
+									<img class="o_Message_authorAvatar o_m2m_avatar w-100 h-100 o_object_fit_cover cursor-pointer o_redirect"
+								     t-attf-src="/web/image/res.partner/{{ props.data.approval_user.partner_id }}/avatar_128"
+								     tabindex="0" t-attf-href="#id={{ props.data.approval_user.partner_id }}&amp;model=res.users"/>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<strong t-if="props.data.is_rejected">Rejected By: </strong>
+								<strong t-else="">Approved By: </strong>
+							</td>
+							<td>
+								<t t-esc="props.data.approval_user.name"></t>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<strong t-if="props.data.is_rejected">Rejected On: </strong>
+								<strong t-else="">Approved On: </strong>
+							</td>
+							<td>
+								<t t-esc="props.data.approval_time"></t>
+							</td>
+						</tr>
+						<tr t-if="props.data.comment">
+							<td>
+								<strong t-if="props.data.is_rejected &amp;&amp; props.data.comment">Comment: </strong>
+							</td>
+							<td>
+								<p class="m-0 text-danger" t-esc="props.data.comment"></p>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</t>
+</templates>

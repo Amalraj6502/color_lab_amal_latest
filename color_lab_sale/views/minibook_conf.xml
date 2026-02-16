@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="minibook_conf_tree">
+            <field name="name">Mini Book Configuration</field>
+            <field name="model">mini.book.conf</field>
+            <field name="arch" type="xml">
+                <list string="Mini Book Configuration Tree">
+                    <field name="name"/>
+                    <field name="height"/>
+                    <field name="weight"/>
+                    <field name="length"/>
+                    <field name="width"/>
+                    <field name="amount"/>
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="mini_book_conf_form">
+            <field name="name">mini.book.conf.form</field>
+            <field name="model">mini.book.conf</field>
+            <field name="arch" type="xml">
+                <form string="Mini Book Configuration Form">
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field id="name" widget="text" class="text-break" name="name" default_focus="1"
+                                       placeholder="e.g. Mini Book 200 x 100" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="height"/>
+                                <field name="weight"/>
+
+                            </group>
+                            <group>
+                                <field name="length"/>
+                                <field name="width"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" readonly="1" invisible="1" force_save="1"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <label for="remarks"/>
+                        <field name="remarks"/>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        <record id="mini_book_conf_menu_action" model="ir.actions.act_window">
+            <field name="name">Mini Book Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mini.book.conf</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Mini Book Configuration</p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_alukkas_inventory_configuration" parent="stock.menu_stock_root"
+                  name="Products Configurations"/>
+        <menuitem id="menu_mini_book_configuration" parent="color_lab_sale.menu_alukkas_inventory_configuration"
+                  name="Mini Book Configuration"
+                  action="mini_book_conf_menu_action"/>
+    </data>
+</odoo>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="operation_work_orders_tree">
+            <field name="name">Operation Work Orders List</field>
+            <field name="model">operation.work.orders</field>
+            <field name="arch" type="xml">
+                <list string="Operation Work Order List">
+                    <field name="name"/>
+                    <field name="work_category_id"/>
+                    <field name="work_category_type"/>
+                    <field name="sale_order_id"/>
+                    <field name="date" optional="hide"/>
+                    <field name="color" column_invisible="1" optional="hide"/>
+                    <field name="state"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="section"/>
+                    <field name="batch_number"/>
+                    <field name="current_batch"/>
+                    <field name="assigned_to"/>
+                    <field name="active" column_invisible="1"/>
+                    <field name="group_ids" widget="many2many_tags"/>
+                    <!--                    <field name="active_batch" column_invisible="0" force_save="1"/>-->
+                    <!--                    <field name="sequence" column_invisible="0"/>-->
+                </list>
+            </field>
+        </record>
+
+        <record id="view_operation_work_orders_view" model="ir.ui.view">
+            <field name="name">operation.work.orders.view</field>
+            <field name="model">operation.work.orders</field>
+            <field name="arch" type="xml">
+                <form string="Operation Work Order">
+                    <header>
+                        <button name="action_in_progress" type="object" class="oe_highlight" string="Mark in Progress"
+                                invisible="state != '1_draft'"/>
+                        <button name="action_mark_as_done" type="object" class="oe_highlight"
+                                invisible="state != '2_in_progress'"
+                                string="Mark as Done"/>
+                        <button name="revise_order_flow" type="object"
+                                invisible="state != '2_in_progress'"
+                                string="Return / Change Work Flow"/>
+                        <field name="state" widget="statusbar" statusbar_visible="1_draft,2_in_progress,3_done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="work_category_id" readonly="1" force_save="1"/>
+                                <field name="work_category_type" readonly="1" force_save="1"/>
+                                <field name="sale_order_id" readonly="1" force_save="1"/>
+                                <field name="completion_date" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="priority" widget="priority"/>
+
+                                <field name="section" readonly="1" force_save="1" invisible="1"/>
+                                <field name="batch_number" readonly="1" force_save="1" invisible="1"/>
+                                <field name="approve_count" invisible="1"/>
+                                <field name="assigned_to"/>
+                                <field name="group_ids" widget="many2many_tags" readonly="1" force_save="1"/>
+                            </group>
+                        </group>
+                        <chatter/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="operation_work_order_kanban_view">
+            <field name="name">operation.work.orders.kanban</field>
+            <field name="model">operation.work.orders</field>
+            <field name="arch" type="xml">
+                <kanban highlight_color="color" default_group_by="state" sample="1" class="o_kanban_small_column">
+                    <!-- Fields -->
+                    <field name="name"/>
+                    <field name="work_category_id"/>
+                    <field name="work_category_type"/>
+                    <field name="sale_order_id"/>
+                    <field name="state"/>
+                    <field name="color"/>
+                    <field name="user_id"/>
+                    <field name="priority"/>
+                    <field name="activity_ids"/>
+
+                    <!-- Templates -->
+                    <templates>
+                        <t t-name="menu">
+                            <t t-if="widget.editable">
+                                <a role="menuitem" type="open" class="dropdown-item">Edit...</a>
+                            </t>
+                            <t t-if="widget.deletable">
+                                <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                            </t>
+                            <field name="color" widget="kanban_color_picker"/>
+                        </t>
+                        <t t-name="kanban-box" class="o_kanban_record o_kanban_custom">
+                            <!-- Main Card -->
+                            <div class="o_kanban_card_content d-flex flex-column position-relative">
+                                <!-- Card Header -->
+                                <div class="mb-2">
+                                    <field name="display_name" class="fw-bold fs-5"/>
+                                </div>
+
+                                <!-- Work Category and Sale Order -->
+                                <div t-if="record.work_category_id.raw_value" class="mb-2">
+                                    <field name="work_category_id" class="text-muted"/>
+                                    <span t-if="record.sale_order_id.raw_value">,</span>
+                                    <field name="sale_order_id" class="d-inline"/>
+                                </div>
+
+                                <!-- Buttons Section -->
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <!-- Open Sale Order Button -->
+                                    <a type="object" name="open_sale_order"
+                                       class="button-custom btn-primary btn-gradient">
+                                        <span>Open Sale Order</span>
+                                    </a>
+
+                                    <!-- State Buttons -->
+                                    <div class="d-flex align-items-center gap-1">
+                                        <a type="object" name="action_in_progress" class="btn btn-warning btn-gradient"
+                                           invisible="state != '1_draft'"
+                                        >
+                                            <span>Mark as In Progress</span>
+                                        </a>
+                                        <a type="object" name="action_mark_as_done" class="btn btn-success btn-gradient"
+                                           invisible="state != '2_in_progress'"
+                                        >
+                                            <span>Mark as Done</span>
+                                        </a>
+                                        <a type="object" name="download_report_sale" class="btn btn-info btn-gradient"
+                                           invisible="state != '3_done'"
+                                        >
+                                            <span>Download Report</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Footer Section -->
+                                <footer class="d-flex justify-content-between align-items-center mt-2"
+                                        style="border-top: 1px solid #333333;padding-top: 12px;margin-top: 12px;">
+                                    <!-- Priority and Activities -->
+                                    <div class="d-flex align-items-center gap-1">
+                                        <field name="priority" widget="priority" style="margin-right: 5px;"/>
+                                        <field name="activity_ids" widget="kanban_activity" style="margin-right: 2px"/>
+                                    </div>
+
+                                    <!-- User Avatar and State Badge -->
+                                    <div class="d-flex ms-auto">
+                                        <field name="user_id" widget="many2one_avatar"/>
+                                        <span t-if="record.state.raw_value" class="badge ms-2"
+                                              t-att-class="'badge-' + record.state.raw_value">
+                                            <field name="state"/>
+                                        </span>
+                                    </div>
+                                </footer>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <menuitem id="operation_work_orders_root_menu" parent="sale.sale_menu_root" name="Operation Work Orders"/>
+
+        <record id="operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">Operation Work Order Overall</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+
+        <menuitem id="operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="Operation Work Orders Overall"
+                  groups="color_lab_sale.group_work_order_manager"
+                  action="operation_work_orders_menu_action"/>
+
+        <!-- NORMAL WORK ORDERS-->
+
+        <record id="normal_operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">Operation Work Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('work_category_type','=','normal'),('current_batch','=',True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+        <menuitem id="normal_operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="Normal Operation Work Orders" groups="color_lab_sale.group_work_order_users"
+                  action="normal_operation_work_orders_menu_action"/>
+
+
+        <!--MINIBOOK WORK ORDERS-->
+        <record id="minibook_operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">MiniBook Operation Work Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('work_category_type','=','minibook'),('current_batch','=',True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+        <menuitem id="minibook_operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="MiniBook Operation Work Orders" groups="color_lab_sale.group_work_order_users"
+                  action="minibook_operation_work_orders_menu_action"/>
+
+        <!--ADDONS WORK ORDERS-->
+        <record id="addons_operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">Addons Operation Work Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('work_category_type','=','addons'),('current_batch','=',True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+        <menuitem id="addons_operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="Addons Operation Work Orders" groups="color_lab_sale.group_work_order_users"
+                  action="addons_operation_work_orders_menu_action"/>
+
+        <!--FRAME WORK ORDERS-->
+        <record id="frame_operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">Frame Operation Work Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('work_category_type','=','frame'),('current_batch','=',True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+        <menuitem id="frame_operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="Frame Operation Work Orders" groups="color_lab_sale.group_work_order_users"
+                  action="frame_operation_work_orders_menu_action"/>
+
+        <!--Digital Print WORK ORDERS-->
+        <record id="digital_print_operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">Digital Print Operation Work Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('work_category_type','=','digital'),('current_batch','=',True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+        <menuitem id="digital_print_operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="Digital Print Operation Work Orders" groups="color_lab_sale.group_work_order_users"
+                  action="digital_print_operation_work_orders_menu_action"/>
+
+         <!--Calender WORK ORDERS-->
+
+        <record id="calender_operation_work_orders_menu_action" model="ir.actions.act_window">
+            <field name="name">Calender Operation Work Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">operation.work.orders</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('work_category_type','=','calender'),('current_batch','=',True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Operation Work Orders</p>
+            </field>
+        </record>
+
+        <menuitem id="calender_operation_work_orders_menu" parent="operation_work_orders_root_menu"
+                  name="Calender Operation Work Orders" groups="color_lab_sale.group_work_order_users"
+                  action="calender_operation_work_orders_menu_action"/>
+    </data>
+</odoo>

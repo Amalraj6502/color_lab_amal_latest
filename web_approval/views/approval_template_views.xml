@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="approval_template_list_view" model="ir.ui.view">
+            <field name="name">approval.template.list</field>
+            <field name="model">approval.template</field>
+            <field name="arch" type="xml">
+                <list string="Approval Templates">
+                    <field name="name"/>
+                    <field name="type_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="approval_template_form_view" model="ir.ui.view">
+            <field name="name">approval.template.form</field>
+            <field name="model">approval.template</field>
+            <field name="arch" type="xml">
+                <form string="Approval Template">
+                    <sheet>
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="e.g. Purchase Order Approval"
+                                   nolabel="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="type_id"/>
+                                <field name="rejection_comment_required"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                            <group>
+                                <field name="access_type"/>
+                                <field name="approval_type"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Approvers">
+                                <div class="text-info mb-2" invisible="approval_type != 'amount'">
+                                    <i class="fa fa-info-circle mr-1" title="Information"/>
+                                    <span>
+                                        If the amount is zero, it is required to be approved regardless of the amount.
+                                    </span>
+                                </div>
+                                <field name="approval_lines">
+                                    <list string="Approvers" editable="bottom">
+                                        <field name="approval_type" invisible="1"/>
+                                        <field name="access_type" invisible="1"/>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="amount_limit" column_invisible="parent.approval_type != 'amount'"/>
+                                        <field name="user_ids" widget="many2many_tags"
+                                               column_invisible="parent.access_type != 'user'"
+                                               />
+                                        <field name="group_ids" widget="many2many_tags"
+                                               column_invisible="parent.access_type != 'group'"
+                                               />
+                                        <field name="escalation_days"/>
+                                        <field name="escalation_user_ids" widget="many2many_tags"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page name="Technical">
+                                <group>
+                                    <group>
+                                        <field name="res_model_id"
+                                               options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                        <field name="res_model_name" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="amount_field_id"
+                                               options="{'no_edit': True, 'no_create': True, 'no_open': True}"
+
+                                        />
+                                    </group>
+                                </group>
+                                <separator/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="approval_template_action" model="ir.actions.act_window">
+            <field name="name">Approval Templates</field>
+            <field name="res_model">approval.template</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_approvals" name="Approvals" parent="base.menu_administration" sequence="100"/>
+
+        <menuitem id="menu_approval_template" name="Approval Templates" sequence="1"
+                  action="web_approval.approval_template_action" parent="menu_approvals"/>
+    </data>
+</odoo>

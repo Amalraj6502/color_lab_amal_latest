@@ -1,0 +1,108 @@
+<odoo>
+    <data>
+
+        <record id="view_agent_customer_form_tree" model="ir.ui.view">
+            <field name="name">agent.customer.form.list</field>
+            <field name="model">agent.customer.form</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <list string="Agent Form" sample="1" multi_edit="1">
+                    <field name="name" string="Name"/>
+                    <field name="phone" class="o_force_ltr" optional="show"/>
+                    <field name="mobile" optional="hide"/>
+                    <field name="email" optional="show"/>
+                    <field name="street" optional="hide"/>
+                    <field name="city" optional="show"/>
+                    <field name="state_id" optional="hide" readonly="1"/>
+                    <field name="country_id" optional="show" readonly="1"/>
+                    <field name="vat" optional="hide" readonly="1"/>
+                    <field name="category_id" optional="hide" widget="many2many_tags"
+                           options="{'color_field': 'color'}"/>
+                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                </list>
+            </field>
+        </record>
+        <record id="view_agent_customer_form" model="ir.ui.view">
+            <field name="name">agent.customer.form.view</field>
+            <field name="model">agent.customer.form</field>
+            <field name="arch" type="xml">
+                <form string="Agent">
+                    <header>
+                        <button name="action_confirm" type="object" class="oe_highlight" invisible="state != 'draft'"
+                                string="Confirm"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="show_partner" string="Contact Details"
+                                    class="oe_stat_button" icon="fa-address-book">
+                            </button>
+
+                        </div>
+
+                        <widget name="web_ribbon" title="Confirmed" bg_color="bg-success"
+                                invisible="state != 'confirm'"/>
+                        <field name="image_1920" widget='image' class="oe_avatar"/>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field id="name" widget="text" class="text-break" name="name" default_focus="1"
+                                       placeholder="e.g. Lumber Inc"/>
+                            </h1>
+                            <div class="o_row">
+                                <field name="parent_id" readonly="state != 'draft'"
+                                       widget="res_partner_many2one"
+                                       placeholder="Agent Name..."
+                                />
+
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <span class="o_form_label o_td_label o_address_type" name="address_name">
+                                    <span>Address</span>
+                                </span>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"
+                                           options="{'no_open': True, 'no_quick_create': True}"
+                                           context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <div name="partner_address_country" class="d-flex justify-content-between">
+                                        <field name="country_id" placeholder="Country" class="o_address_country"
+                                               options='{"no_open": True, "no_create": True}'/>
+                                    </div>
+                                </div>
+                                <field name="vat" placeholder="e.g. BE0477472701"/>
+                                <field name="partner_latitude"/>
+                                <field name="partner_longitude"/>
+                            </group>
+                            <group>
+                                <field name="phone" widget="phone"/>
+                                <field name="mobile" widget="phone"/>
+                                <field name="email" widget="email" context="{'gravatar_image': True}"/>
+                                <field name="website" string="Website" widget="url"
+                                       placeholder="e.g. https://www.odoo.com"/>
+                                <field name="title" options='{"no_open": True}' placeholder="e.g. Mister"/>
+                                <field name="lang"/>
+                                <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"
+                                       placeholder='e.g. "B2B", "VIP", "Consulting", ...'/>
+                            </group>
+                        </group>
+                        <chatter/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="agent_customer_form_action" model="ir.actions.act_window">
+            <field name="name">Agent Customer Form</field>
+            <field name="res_model">agent.customer.form</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_form_customer_agent" name="Agent Customer Form" parent="menu_form_root" sequence="1"
+                  action="agent_customer_form_action"/>
+    </data>
+</odoo>

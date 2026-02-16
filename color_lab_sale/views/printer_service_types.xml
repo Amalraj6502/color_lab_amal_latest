@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="service_types_list">
+            <field name="name">Services Types</field>
+            <field name="model">printer.service</field>
+            <field name="arch" type="xml">
+                <list string="Services Types List" editable="bottom">
+                    <field name="name"/>
+                    <field name="code"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="printer_service_menu_action" model="ir.actions.act_window">
+            <field name="name">Printer Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">printer.service</field>
+            <field name="view_mode">list</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The Printer Service</p>
+            </field>
+        </record>
+        <menuitem id="printer_service" parent="color_lab_sale.configuration_main_custom_menu" name="Printer Service" sequence="2"
+                  action="printer_service_menu_action"/>
+    </data>
+</odoo>

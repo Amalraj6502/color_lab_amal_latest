@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Tree View -->
+        <record model="ir.ui.view" id="title_tree">
+            <field name="name">sales.title.conf.tree</field>
+            <field name="model">sales.title.conf</field>
+            <field name="arch" type="xml">
+                <list string="Title Tree">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View with Right-Side Chatter -->
+        <record model="ir.ui.view" id="title_form">
+            <field name="name">sales.title.conf.form</field>
+            <field name="model">sales.title.conf</field>
+            <field name="arch" type="xml">
+                <form string="Title Form">
+                    <sheet>
+                        <div class="col-8">
+                            <group>
+                                <field name="name" force_save="1" placeholder="Marriage,Baptism etc..."/>
+                            </group>
+                        </div>
+
+                        <div class="col-4">
+                            <chatter/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="sale_title_conf_menu_action" model="ir.actions.act_window">
+            <field name="name">Title</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.title.conf</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create New Title</p>
+            </field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="sale_title_conf"
+                  parent="color_lab_sale.configuration_main_custom_menu"
+                  name="Title"
+                  action="sale_title_conf_menu_action"/>
+
+    </data>
+</odoo>
